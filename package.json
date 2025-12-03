@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Laravel-inspired framework for Node.js monorepos",
   "type": "module",
-  "private": true,
   "packageManager": "pnpm@10.22.0",
   "imports": {
     "#framework": "./framework/index.js",
@@ -84,5 +83,16 @@
     "multer": "^2.0.2",
     "pg": "^8.16.3",
     "sharp": "^0.33.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rishicool/vasuzex.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rishicool/vasuzex/issues"
+  },
+  "homepage": "https://github.com/rishicool/vasuzex#readme",
+  "publishConfig": {
+    "access": "public"
   }
 }
