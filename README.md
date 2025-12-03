@@ -1,5 +1,9 @@
 # Vasuzex Framework
 
+> **⚠️ WARNING: DEVELOPMENT VERSION**  
+> This framework is currently under active development and is **NOT recommended for production use**.  
+> Use at your own risk. APIs may change without notice. Expect bugs and breaking changes.
+
 A Laravel-inspired Node.js framework with Eloquent ORM, Facades, and zero-configuration setup.
 
 ## ⚡ Quick Start

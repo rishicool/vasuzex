@@ -1,5 +1,9 @@
 # Vasuzex Framework Documentation
 
+> **⚠️ WARNING: DEVELOPMENT VERSION**  
+> This framework is currently under active development and is **NOT recommended for production use**.  
+> Use at your own risk. APIs may change without notice. Expect bugs and breaking changes.
+
 ## Table of Contents
 
 ### Getting Started
