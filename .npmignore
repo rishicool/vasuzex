@@ -48,17 +48,18 @@ Thumbs.db
 pnpm-workspace.yaml
 turbo.json
 
-# Apps (don't publish example apps)
-apps/
+# Example/test apps (but keep starter apps)
 cronjobs/
 download/
-media-server/
 nginx/
 scripts/
 uploads/
 
-# Keep only framework and core packages
+# Keep essential directories
 !framework/
 !packages/
 !config/
 !database/
+!apps/blog-api/
+!apps/media-server/
+!examples/

@@ -1,28 +1,33 @@
 # Vasuzex Framework
 
-Laravel-inspired framework for Node.js monorepo applications with Facades and Import Aliases. Built with ES modules, designed for scalability and developer experience.
+A Laravel-inspired Node.js framework with Eloquent ORM, Facades, and zero-configuration setup.
 
-## 🎯 Features
-
-- **Laravel-Inspired Architecture** - Familiar structure for PHP developers
-- **Facades System** - Static accessors like Laravel (DB, Cache, Auth, etc.)
-- **Import Aliases** - Clean imports with `#framework`, `#models`, `#database`
-- **Monorepo Ready** - Built for pnpm workspaces with Turborepo
-- **GuruORM Integration** - Eloquent-style ORM with relationships, scopes, events
-- **Hybrid Config System** - File-based (Laravel) + Database-driven (dynamic)
-- **Storage Management** - Multi-disk support (Local, S3, custom)
-- **Mail Service** - SMTP, SendGrid, SES providers
-- **Cache & Queue** - Redis, Database, Array drivers
-- **Authentication & Authorization** - Guards, gates, policies
-- **Service Container** - Dependency injection and service resolution
-
-## 📦 Installation
+## ⚡ Quick Start
 
 ```bash
+npx create-vasuzex my-app
+cd my-app
 pnpm install
 pnpm db:migrate
 pnpm dev
 ```
+
+That's it! Your app is running on `http://localhost:3000` 🎉
+
+## 🎯 Features
+
+- **🚀 Zero Configuration** - Interactive CLI sets up everything
+- **📦 GuruORM Built-in** - Eloquent-style ORM included (no separate install)
+- **🎨 Laravel-Inspired** - Familiar structure for PHP developers
+- **🔧 Starter Apps** - Blog API & Media Server ready to use
+- **📁 Import Aliases** - Clean imports: `#framework`, `#models`, `#config`
+- **💾 Database Ready** - PostgreSQL, MySQL, SQLite support
+- **🔐 Authentication** - Guards, middleware, hashing built-in
+- **📧 Services** - Mail, SMS, Cache, Queue, Storage, Upload
+- **🖼️ Media Processing** - Image resize, optimization with Sharp
+- **✅ Validation** - Comprehensive validation including Indian validators
+- **📍 Location** - Geocoding, distance, area calculations
+- **🌍 GeoIP** - IP geolocation with MaxMind
 
 ## 🏗️ Structure
 
