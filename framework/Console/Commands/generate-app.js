@@ -54,6 +54,10 @@ async function generateSingleApp(name, type) {
     await mkdir(join(targetDir, 'src', 'requests'), { recursive: true });
     await mkdir(join(targetDir, 'config'), { recursive: true });
 
+    // Detect if using workspace (development) or published package
+    const isWorkspace = existsSync(join(process.cwd(), 'pnpm-workspace.yaml'));
+    const vasuzexDep = isWorkspace ? 'workspace:*' : '^1.0.0';
+
     // Generate package.json with imports for framework paths
     const packageJson = {
       name: `${name}-${type}`,
@@ -66,8 +70,8 @@ async function generateSingleApp(name, type) {
         start: 'node src/index.js',
       },
       dependencies: {
-        vasuzex: '^1.0.0',
-        guruorm: '^1.17.6',
+        vasuzex: vasuzexDep,
+        guruorm: '^2.0.0',
         express: '^4.21.2',
         cors: '^2.8.5',
         helmet: '^8.0.0',
@@ -136,7 +140,7 @@ module.exports = {
  * ${name.charAt(0).toUpperCase() + name.slice(1)} ${type.toUpperCase()} Application
  */
 
-import { Application } from 'vasuzex/Foundation/Application.js';
+import { Application } from 'vasuzex';
 
 // Create application instance
 const app = new Application(process.cwd());
@@ -169,7 +173,7 @@ export default app;
  * Extends framework Controller with app-specific helpers
  */
 
-import { Controller } from 'vasuzex/Http/Controller.js';
+import { Controller } from 'vasuzex';
 
 export class BaseController extends Controller {
   /**

@@ -128,6 +128,16 @@ async function createProject(projectName) {
       let pkgContent = await fs.readFile(pkgStubPath, 'utf-8');
       pkgContent = pkgContent.replace(/PROJECT_NAME/g, projectName);
       
+      // Detect if running from local development (not published to NPM)
+      const isLocalDev = __dirname.includes('/work/vasuzex/') || __dirname.includes('\\work\\vasuzex\\');
+      
+      if (isLocalDev) {
+        // For local development, use file: protocol to link to parent vasuzex
+        const vasuzexPath = path.resolve(__dirname, '..');
+        pkgContent = pkgContent.replace(/"vasuzex": "\^1\.0\.0"/g, `"vasuzex": "file:${vasuzexPath}"`);
+        console.log(chalk.cyan(`\n🔧 Development mode: Using local vasuzex from ${vasuzexPath}\n`));
+      }
+      
       await fs.writeFile(path.join(targetDir, 'package.json'), pkgContent);
       await fs.remove(pkgStubPath);
     }

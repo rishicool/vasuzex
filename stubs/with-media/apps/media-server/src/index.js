@@ -6,8 +6,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { Application } from 'vasuzex/Foundation/Application.js';
-import { MediaServiceProvider } from 'vasuzex/Services/Media/MediaServiceProvider.js';
+import { Application, MediaServiceProvider } from 'vasuzex';
 
 const PORT = process.env.MEDIA_SERVER_PORT || 4003;
 

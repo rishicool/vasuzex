@@ -3,8 +3,7 @@
  * Handles dynamic image thumbnail requests
  */
 
-import { Controller } from 'vasuzex/Http/Controller.js';
-import { Media } from 'vasuzex/Support/Facades/Media.js';
+import { Controller, Media } from 'vasuzex';
 
 export class ImageController extends Controller {
   /**

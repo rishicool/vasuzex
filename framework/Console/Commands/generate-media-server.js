@@ -27,6 +27,10 @@ export async function generateMediaServer(options) {
     await mkdir(join(targetDir, 'src', 'routes'), { recursive: true });
     await mkdir(join(targetDir, 'config'), { recursive: true });
 
+    // Detect if using workspace (development) or published package
+    const isWorkspace = existsSync(join(process.cwd(), 'pnpm-workspace.yaml'));
+    const vasuzexDep = isWorkspace ? 'workspace:*' : '^1.0.0';
+
     // Generate package.json
     const packageJson = {
       name: '@vasuzex/media-server',
@@ -39,7 +43,7 @@ export async function generateMediaServer(options) {
         start: 'node src/index.js',
       },
       dependencies: {
-        vasuzex: '^1.0.0',
+        vasuzex: vasuzexDep,
         express: '^4.21.2',
         cors: '^2.8.5',
         helmet: '^8.0.0',
@@ -107,8 +111,7 @@ MEDIA_STRICT_SIZES=false
  * Handles dynamic image thumbnail requests
  */
 
-import { Controller } from 'vasuzex/Http/Controller.js';
-import { Media } from 'vasuzex/Support/Facades/Media.js';
+import { Controller, Media } from 'vasuzex';
 
 export class ImageController extends Controller {
   /**
@@ -328,8 +331,7 @@ export function setupRoutes(server) {
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { Application } from 'vasuzex/Foundation/Application.js';
-import { MediaServiceProvider } from 'vasuzex/Services/Media/MediaServiceProvider.js';
+import { Application, MediaServiceProvider } from 'vasuzex';
 
 const PORT = process.env.MEDIA_SERVER_PORT || ${port};
 

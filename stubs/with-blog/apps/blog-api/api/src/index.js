@@ -2,7 +2,7 @@
  * Blog-api API Application
  */
 
-import { Application } from 'vasuzex/Foundation/Application.js';
+import { Application } from 'vasuzex';
 
 // Create application instance
 const app = new Application(process.cwd());
