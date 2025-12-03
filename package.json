@@ -78,7 +78,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^5.2.1",
-    "guruorm": "1.18.4",
+    "guruorm": "^2.0.0",
     "helmet": "^8.1.0",
     "maxmind": "^5.0.1",
     "multer": "^2.0.2",
