@@ -54,9 +54,29 @@ async function generateSingleApp(name, type) {
     await mkdir(join(targetDir, 'src', 'requests'), { recursive: true });
     await mkdir(join(targetDir, 'config'), { recursive: true });
 
-    // Detect if using workspace (development) or published package
-    const isWorkspace = existsSync(join(process.cwd(), 'pnpm-workspace.yaml'));
-    const vasuzexDep = isWorkspace ? 'workspace:*' : '^1.0.0';
+    // Detect dependency version for vasuzex
+    // If running in development vasuzex workspace, use workspace:*
+    // If vasuzex is installed via file: protocol, use file:..  
+    // Otherwise use ^1.0.0 for published package
+    let vasuzexDep = '^1.0.0';
+    
+    const rootPkgPath = join(process.cwd(), 'package.json');
+    if (existsSync(rootPkgPath)) {
+      try {
+        const rootPkg = JSON.parse(readFileSync(rootPkgPath, 'utf-8'));
+        const vasuzexValue = rootPkg.dependencies?.vasuzex || '';
+        
+        if (vasuzexValue.startsWith('file:')) {
+          // Use same file: path
+          vasuzexDep = vasuzexValue;
+        } else if (existsSync(join(process.cwd(), 'pnpm-workspace.yaml'))) {
+          // Development workspace
+          vasuzexDep = 'workspace:*';
+        }
+      } catch (err) {
+        // Fallback to ^1.0.0
+      }
+    }
 
     // Generate package.json with imports for framework paths
     const packageJson = {

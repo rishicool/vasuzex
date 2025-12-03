@@ -42,7 +42,7 @@ module.exports = {
 ### Using Facade (Recommended)
 
 ```javascript
-import { GeoIP } from '#framework/Support/Facades';
+import { GeoIP } from 'vasuzex/Support/Facades';
 
 // Locate IP with full details
 const location = await GeoIP.locate('8.8.8.8');
@@ -91,7 +91,7 @@ console.log(isUS); // true
 ### Using Service Directly
 
 ```javascript
-import app from '#framework/Foundation/Application.js';
+import app from 'vasuzex/Foundation/Application.js';
 
 const geoip = app.make('geoip');
 
@@ -103,7 +103,7 @@ const location = await geoip.locate('8.8.8.8');
 #### 1. **Restrict Access by Country**
 
 ```javascript
-import { GeoIP } from '#framework/Support/Facades';
+import { GeoIP } from 'vasuzex/Support/Facades';
 
 export const countryBlockMiddleware = async (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;
@@ -124,7 +124,7 @@ export const countryBlockMiddleware = async (req, res, next) => {
 #### 2. **Show Localized Content**
 
 ```javascript
-import { GeoIP } from '#framework/Support/Facades';
+import { GeoIP } from 'vasuzex/Support/Facades';
 
 export const localizeContent = async (req, res) => {
   const ip = req.ip;
@@ -149,7 +149,7 @@ export const localizeContent = async (req, res) => {
 #### 3. **Fraud Detection**
 
 ```javascript
-import { GeoIP } from '#framework/Support/Facades';
+import { GeoIP } from 'vasuzex/Support/Facades';
 
 export const detectFraud = async (userId, ip) => {
   const user = await User.findById(userId);
@@ -187,7 +187,7 @@ export const detectFraud = async (userId, ip) => {
 #### 4. **Analytics Dashboard**
 
 ```javascript
-import { GeoIP } from '#framework/Support/Facades';
+import { GeoIP } from 'vasuzex/Support/Facades';
 
 export const trackVisitor = async (req) => {
   const ip = req.ip;
@@ -221,7 +221,7 @@ export const getVisitorStats = async () => {
 #### 5. **Show Currency Based on Location**
 
 ```javascript
-import { GeoIP } from '#framework/Support/Facades';
+import { GeoIP } from 'vasuzex/Support/Facades';
 
 const currencyByCountry = {
   US: 'USD',
@@ -382,7 +382,7 @@ echo "GeoIP database updated successfully"
 ## Error Handling
 
 ```javascript
-import { GeoIP } from '#framework/Support/Facades';
+import { GeoIP } from 'vasuzex/Support/Facades';
 
 try {
   const location = await GeoIP.locate('8.8.8.8');

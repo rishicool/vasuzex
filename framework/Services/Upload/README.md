@@ -120,7 +120,7 @@ UPLOAD_SECURITY_VALIDATE_SIGNATURES=true
 ### Upload File
 
 ```javascript
-import { Upload } from '#framework';
+import { Upload } from 'vasuzex';
 
 // Upload single file
 const result = await Upload.upload(file, {
@@ -322,7 +322,7 @@ const directUrl = Upload.disk('spaces').directUrl('images/photo.jpg');
 ### Preset Rules
 
 ```javascript
-import { FileValidator } from '#framework';
+import { FileValidator } from 'vasuzex';
 
 // Use preset for images
 await Upload.upload(file, {
@@ -475,7 +475,7 @@ await Upload.upload(file, {
 ### Image Optimization
 
 ```javascript
-import { ImageProcessor } from '#framework';
+import { ImageProcessor } from 'vasuzex';
 
 const processor = new ImageProcessor(app);
 
@@ -539,7 +539,7 @@ module.exports = {
 ### Sanitize Filenames
 
 ```javascript
-import { SecurityScanner } from '#framework';
+import { SecurityScanner } from 'vasuzex';
 
 const scanner = new SecurityScanner(app);
 
@@ -554,7 +554,7 @@ Upload service works seamlessly with Multer:
 
 ```javascript
 import multer from 'multer';
-import { Upload } from '#framework';
+import { Upload } from 'vasuzex';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -600,7 +600,7 @@ const result = await Upload.upload(buffer, {
 ## Error Handling
 
 ```javascript
-import { ValidationError, SecurityError } from '#framework';
+import { ValidationError, SecurityError } from 'vasuzex';
 
 try {
   await Upload.upload(file, {
@@ -624,7 +624,7 @@ try {
 ### Custom Driver
 
 ```javascript
-import { UploadManager } from '#framework';
+import { UploadManager } from 'vasuzex';
 
 class CustomDriver {
   async upload(buffer, filepath, options) {
@@ -651,7 +651,7 @@ await Upload.disk('custom').upload(file);
 ### Programmatic Usage
 
 ```javascript
-import { UploadManager } from '#framework';
+import { UploadManager } from 'vasuzex';
 
 const uploadManager = new UploadManager(app);
 
@@ -765,7 +765,7 @@ const signedUrl = await Upload.disk('s3').getSignedUrl(
 ### 1. Process Images Asynchronously
 
 ```javascript
-import { Queue } from '#framework';
+import { Queue } from 'vasuzex';
 
 // Queue image processing
 await Queue.push('process-image', {
@@ -830,7 +830,7 @@ module.exports = {
 };
 
 // In tests
-import { Upload } from '#framework';
+import { Upload } from 'vasuzex';
 
 test('upload file', async () => {
   const file = createMockFile();

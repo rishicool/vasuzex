@@ -20,7 +20,7 @@ This ensures all services are registered before any provider tries to use them.
 ### Basic Structure
 
 ```javascript
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 
 export class AppServiceProvider extends ServiceProvider {
   /**
@@ -95,7 +95,7 @@ export class AppServiceProvider extends ServiceProvider {
 Register your service providers in your application bootstrap:
 
 ```javascript
-import { Application } from '#framework';
+import { Application } from 'vasuzex';
 import { AppServiceProvider } from './providers/AppServiceProvider.js';
 import { DatabaseServiceProvider } from './providers/DatabaseServiceProvider.js';
 
@@ -114,9 +114,9 @@ await app.boot();
 ### Example 1: Database Service Provider
 
 ```javascript
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 import { DatabaseConnection } from '../services/DatabaseConnection.js';
-import { Model } from '#framework';
+import { Model } from 'vasuzex';
 
 export class DatabaseServiceProvider extends ServiceProvider {
   register() {
@@ -151,7 +151,7 @@ export class DatabaseServiceProvider extends ServiceProvider {
 ### Example 2: Cache Service Provider
 
 ```javascript
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 import { CacheManager } from '../services/CacheManager.js';
 import { RedisStore } from '../services/Cache/RedisStore.js';
 import { MemoryStore } from '../services/Cache/MemoryStore.js';
@@ -186,7 +186,7 @@ export class CacheServiceProvider extends ServiceProvider {
 ### Example 3: Mail Service Provider
 
 ```javascript
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 import { MailManager } from '../services/MailManager.js';
 import { SmtpTransport } from '../services/Mail/SmtpTransport.js';
 import { SesTransport } from '../services/Mail/SesTransport.js';
@@ -221,7 +221,7 @@ export class MailServiceProvider extends ServiceProvider {
 ### Example 4: Validation Service Provider
 
 ```javascript
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 import { Validator } from '../services/Validator.js';
 import { indianPANValidator } from '../validators/IndianValidators.js';
 
@@ -251,7 +251,7 @@ export class ValidationServiceProvider extends ServiceProvider {
 ### Example 5: Repository Pattern Provider
 
 ```javascript
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 import { UserRepository } from '../repositories/UserRepository.js';
 import { PostRepository } from '../repositories/PostRepository.js';
 
@@ -358,7 +358,7 @@ export class AppServiceProvider extends ServiceProvider {
 ## Testing Service Providers
 
 ```javascript
-import { Application } from '#framework';
+import { Application } from 'vasuzex';
 import { AppServiceProvider } from './AppServiceProvider.js';
 
 describe('AppServiceProvider', () => {
@@ -394,7 +394,7 @@ Vasuzex includes several core service providers:
 Registers database connection and Model setup:
 
 ```javascript
-import { DatabaseServiceProvider } from '#framework';
+import { DatabaseServiceProvider } from 'vasuzex';
 
 app.register(DatabaseServiceProvider);
 ```
@@ -404,7 +404,7 @@ app.register(DatabaseServiceProvider);
 Registers the formatter service for Indian formats:
 
 ```javascript
-import { FormatterServiceProvider } from '#framework';
+import { FormatterServiceProvider } from 'vasuzex';
 
 app.register(FormatterServiceProvider);
 ```
@@ -414,7 +414,7 @@ app.register(FormatterServiceProvider);
 Registers caching services:
 
 ```javascript
-import { CacheServiceProvider } from '#framework';
+import { CacheServiceProvider } from 'vasuzex';
 
 app.register(CacheServiceProvider);
 ```

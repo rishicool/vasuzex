@@ -6,8 +6,8 @@ Laravel-style import aliases for the entire Neastore framework.
 
 | Alias | Path | Description |
 |-------|------|-------------|
-| `#framework` | `./framework/index.js` | Main framework entry point |
-| `#framework/*` | `./framework/*` | Any framework file |
+| `vasuzex` | `./framework/index.js` | Main framework entry point |
+| `vasuzex/*` | `./framework/*` | Any framework file |
 | `#database` | `./database/index.js` | Database connection |
 | `#database/*` | `./database/*` | Database files |
 | `#models` | `./database/models/index.js` | All models |
@@ -39,8 +39,8 @@ Node.js native import maps (requires Node 18+):
 ```json
 {
   "imports": {
-    "#framework": "./framework/index.js",
-    "#framework/*": "./framework/*",
+    "vasuzex": "./framework/index.js",
+    "vasuzex/*": "./framework/*",
     ...
   }
 }
@@ -52,10 +52,10 @@ Node.js native import maps (requires Node 18+):
 
 ```javascript
 // Instead of: import { Application } from '../../framework/Foundation/Application.js';
-import { Application, DB, Cache, Auth } from '#framework';
+import { Application, DB, Cache, Auth } from 'vasuzex';
 
 // Instead of: import Model from '../../framework/Database/Model.js';
-import { Model } from '#framework';
+import { Model } from 'vasuzex';
 ```
 
 ### Import Facades
@@ -73,11 +73,11 @@ import {
   Storage,
   Config,
   Event
-} from '#framework';
+} from 'vasuzex';
 
 // Or individually
-import DB from '#framework/Support/Facades/DB.js';
-import Cache from '#framework/Support/Facades/Cache.js';
+import DB from 'vasuzex/Support/Facades/DB.js';
+import Cache from 'vasuzex/Support/Facades/Cache.js';
 ```
 
 ### Import Models
@@ -98,17 +98,17 @@ import { User } from '#models/User.js';
 import { getDatabase } from '#database';
 
 // Model base class
-import Model from '#framework/Database/Model.js';
+import Model from 'vasuzex/Database/Model.js';
 
 // Relations
-import { Relations } from '#framework/Database/Relations.js';
+import { Relations } from 'vasuzex/Database/Relations.js';
 ```
 
 ### Import Configuration
 
 ```javascript
 // Config service
-import { Config } from '#framework';
+import { Config } from 'vasuzex';
 
 // Or direct import
 import config from '#config';
@@ -121,10 +121,10 @@ import {
   ConfigServiceProvider,
   LogServiceProvider,
   CacheServiceProvider 
-} from '#framework';
+} from 'vasuzex';
 
 // Or specific provider
-import { AuthServiceProvider } from '#framework/Foundation/Providers/AuthServiceProvider.js';
+import { AuthServiceProvider } from 'vasuzex/Foundation/Providers/AuthServiceProvider.js';
 ```
 
 ## Complete Application Example
@@ -143,7 +143,7 @@ import {
   Hash,
   Log,
   Config
-} from '#framework';
+} from 'vasuzex';
 
 // Import models
 import { Post, User, Comment } from '#models';
@@ -155,7 +155,7 @@ import {
   CacheServiceProvider,
   AuthServiceProvider,
   DatabaseServiceProvider
-} from '#framework';
+} from 'vasuzex';
 
 // Create app
 const app = new Application(process.cwd());
@@ -206,8 +206,8 @@ express.listen(PORT, () => {
  * database/models/Post.js
  */
 
-import Model from '#framework/Database/Model.js';
-import { Relations } from '#framework/Database/Relations.js';
+import Model from 'vasuzex/Database/Model.js';
+import { Relations } from 'vasuzex/Database/Relations.js';
 import { Comment } from '#models/Comment.js';
 
 export class Post extends Model {
@@ -232,7 +232,7 @@ import { Hash } from '../../framework/Hashing/Hash.js';
 
 ### After (Aliases)
 ```javascript
-import { Application, Model, Hash } from '#framework';
+import { Application, Model, Hash } from 'vasuzex';
 import { Post } from '#models';
 ```
 
@@ -255,7 +255,7 @@ use App\Models\Post;
 
 Neastore:
 ```javascript
-import { DB, Cache } from '#framework';
+import { DB, Cache } from 'vasuzex';
 import { Post } from '#models';
 ```
 

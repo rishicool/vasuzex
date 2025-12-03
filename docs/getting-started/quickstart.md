@@ -72,7 +72,7 @@ npx vasuzex make:model Todo
 Edit `database/models/Todo.js`:
 
 ```javascript
-import { Model } from '#framework';
+import { Model } from 'vasuzex';
 
 export class Todo extends Model {
   static table = 'todos';
@@ -107,7 +107,7 @@ npx vasuzex make:controller TodoController
 Edit `apps/api/controllers/TodoController.js`:
 
 ```javascript
-import { Controller } from '#framework';
+import { Controller } from 'vasuzex';
 import { Todo } from '#models';
 
 export class TodoController extends Controller {
@@ -241,7 +241,7 @@ Edit `apps/api/server.js`:
 
 ```javascript
 import express from 'express';
-import { Application } from '#framework';
+import { Application } from 'vasuzex';
 import apiRoutes from './routes/api.js';
 
 const app = express();
@@ -345,7 +345,7 @@ export class CreateTodoRequest {
 Use it in your controller:
 
 ```javascript
-import { Validator } from '#framework';
+import { Validator } from 'vasuzex';
 import { CreateTodoRequest } from '../requests/CreateTodoRequest.js';
 
 export class TodoController extends Controller {
@@ -418,7 +418,7 @@ pnpm db:seed
 Refactor using facades for cleaner code:
 
 ```javascript
-import { DB, Cache, Log } from '#framework';
+import { DB, Cache, Log } from 'vasuzex';
 import { Todo } from '#models';
 
 export class TodoController extends Controller {
@@ -475,7 +475,7 @@ Congratulations! You've built your first Vasuzex application. Here's what to exp
 #### Add User Authentication
 
 ```javascript
-import { Auth } from '#framework';
+import { Auth } from 'vasuzex';
 
 // Protect routes
 router.use('/todos', async (req, res, next) => {
@@ -518,7 +518,7 @@ async index(req, res) {
 #### Add Pagination
 
 ```javascript
-import { Paginator } from '#framework';
+import { Paginator } from 'vasuzex';
 
 async index(req, res) {
   const page = parseInt(req.query.page) || 1;
@@ -607,7 +607,7 @@ return res.json({
 ```javascript
 // services/TodoService.js
 import { Todo } from '#models';
-import { Cache, Log } from '#framework';
+import { Cache, Log } from 'vasuzex';
 
 export class TodoService {
   async getAllTodos(filters = {}) {
@@ -644,7 +644,7 @@ export class TodoService {
 
 ```javascript
 // Test database connection
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 try {
   await DB.raw('SELECT 1');

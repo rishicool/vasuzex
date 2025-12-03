@@ -43,7 +43,7 @@ APP_CURRENCY=INR
 ### Using the Facade
 
 ```javascript
-import { Format } from '#framework';
+import { Format } from 'vasuzex';
 
 // Date formatting
 Format.date(new Date()); // "12/03/2025"

@@ -47,7 +47,7 @@ VONAGE_FROM=MyApp
 ### 2. Basic Usage
 
 ```javascript
-import { SMS } from '#framework';
+import { SMS } from 'vasuzex';
 
 // Send SMS
 await SMS.send({
@@ -324,7 +324,7 @@ export class CustomDriver {
 }
 
 // Register in service provider
-import { SmsManager } from '#framework';
+import { SmsManager } from 'vasuzex';
 
 const sms = new SmsManager(app);
 
@@ -338,7 +338,7 @@ sms.extend('custom', (app, config) => {
 Send SMS asynchronously using queues:
 
 ```javascript
-import { Queue, SMS } from '#framework';
+import { Queue, SMS } from 'vasuzex';
 
 // Create SMS job
 class SendSmsJob {
@@ -364,7 +364,7 @@ await Queue.dispatch(new SendSmsJob('+919876543210', 'Hello!'));
 Listen to SMS events:
 
 ```javascript
-import { Event, SMS } from '#framework';
+import { Event, SMS } from 'vasuzex';
 
 // Listen for SMS sent
 Event.listen('sms.sent', (data) => {
@@ -393,7 +393,7 @@ module.exports = {
 };
 
 // In tests
-import { SMS } from '#framework';
+import { SMS } from 'vasuzex';
 
 test('sends OTP SMS', async () => {
   await SMS.sendOtp('+919876543210', '123456');
@@ -422,7 +422,7 @@ export class MockSmsDriver {
 }
 
 // In tests
-import { SmsManager } from '#framework';
+import { SmsManager } from 'vasuzex';
 
 const sms = new SmsManager(app);
 sms.extend('mock', () => new MockSmsDriver());
@@ -516,7 +516,7 @@ const config = {
 Prevent abuse:
 
 ```javascript
-import { RateLimiter } from '#framework';
+import { RateLimiter } from 'vasuzex';
 
 // Limit SMS to 5 per hour per user
 await RateLimiter.attempt(
@@ -531,7 +531,7 @@ await SMS.send({...});
 ### 3. Validate Phone Numbers
 
 ```javascript
-import { Validator } from '#framework';
+import { Validator } from 'vasuzex';
 
 const validator = Validator.make({
   phone: '+919876543210'
@@ -547,7 +547,7 @@ if (validator.fails()) {
 ### 4. Log All SMS
 
 ```javascript
-import { Log } from '#framework';
+import { Log } from 'vasuzex';
 
 const result = await SMS.send({...});
 
@@ -586,7 +586,7 @@ const status = await SMS.driver('twilio').getStatus(messageId);
 ### Analytics
 
 ```javascript
-import { Event } from '#framework';
+import { Event } from 'vasuzex';
 
 Event.listen('sms.sent', async (data) => {
   await DB.table('sms_analytics').insert({
@@ -632,7 +632,7 @@ Solution: Verify API keys in `.env`
 ## 📝 Example: Complete OTP Flow
 
 ```javascript
-import { SMS, Cache, Validator } from '#framework';
+import { SMS, Cache, Validator } from 'vasuzex';
 import { randomInt } from 'crypto';
 
 // 1. Generate and send OTP

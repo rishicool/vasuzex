@@ -27,9 +27,24 @@ export async function generateMediaServer(options) {
     await mkdir(join(targetDir, 'src', 'routes'), { recursive: true });
     await mkdir(join(targetDir, 'config'), { recursive: true });
 
-    // Detect if using workspace (development) or published package
-    const isWorkspace = existsSync(join(process.cwd(), 'pnpm-workspace.yaml'));
-    const vasuzexDep = isWorkspace ? 'workspace:*' : '^1.0.0';
+    // Detect dependency version for vasuzex
+    let vasuzexDep = '^1.0.0';
+    
+    const rootPkgPath = join(process.cwd(), 'package.json');
+    if (existsSync(rootPkgPath)) {
+      try {
+        const rootPkg = JSON.parse(readFileSync(rootPkgPath, 'utf-8'));
+        const vasuzexValue = rootPkg.dependencies?.vasuzex || '';
+        
+        if (vasuzexValue.startsWith('file:')) {
+          vasuzexDep = vasuzexValue;
+        } else if (existsSync(join(process.cwd(), 'pnpm-workspace.yaml'))) {
+          vasuzexDep = 'workspace:*';
+        }
+      } catch (err) {
+        // Fallback to ^1.0.0
+      }
+    }
 
     // Generate package.json
     const packageJson = {

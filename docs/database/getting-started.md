@@ -77,7 +77,7 @@ DB_PASSWORD=secret
 ### Using the DB Facade
 
 ```javascript
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 // Select
 const users = await DB.table('users').get();
@@ -132,7 +132,7 @@ const result = await DB.connection().query('SELECT NOW()');
 
 ```javascript
 // database/models/User.js
-import { Model } from '#framework';
+import { Model } from 'vasuzex';
 
 export class User extends Model {
   static table = 'users';
@@ -185,7 +185,7 @@ await User.destroy(1);
 ### Retrieving Results
 
 ```javascript
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 // Get all rows
 const users = await DB.table('users').get();
@@ -333,7 +333,7 @@ const popularUsers = await DB.table('posts')
 ## Transactions
 
 ```javascript
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 // Basic transaction
 await DB.transaction(async () => {
@@ -383,7 +383,7 @@ export class User extends Model {
 ## Database Events
 
 ```javascript
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 // Query executed event
 DB.listen('query', (query) => {

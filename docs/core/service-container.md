@@ -19,7 +19,7 @@ Think of it as a registry that knows how to create and provide instances of your
 The container is available through the Application instance:
 
 ```javascript
-import { Application } from '#framework';
+import { Application } from 'vasuzex';
 
 const app = new Application(process.cwd());
 await app.boot();
@@ -211,7 +211,7 @@ app.flush();
 ### Example 1: Database Service
 
 ```javascript
-import { Container } from '#framework';
+import { Container } from 'vasuzex';
 
 class DatabaseConnection {
   constructor(config) {
@@ -421,7 +421,7 @@ const result = paymentService.processPayment(100, 'tok_123');
 Service providers use the container to register bindings:
 
 ```javascript
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 
 class AppServiceProvider extends ServiceProvider {
   register() {

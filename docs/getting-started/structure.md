@@ -245,7 +245,7 @@ Eloquent ORM models:
 
 ```javascript
 // database/models/User.js
-import { Model } from '#framework';
+import { Model } from 'vasuzex';
 
 export class User extends Model {
   static table = 'users';
@@ -282,7 +282,7 @@ Vasuzex provides convenient import aliases:
 
 ```javascript
 // Framework imports
-import { Application, DB, Cache } from '#framework';
+import { Application, DB, Cache } from 'vasuzex';
 
 // Models
 import { User, Post } from '#models';
@@ -300,8 +300,8 @@ import config from '#config';
 {
   "compilerOptions": {
     "paths": {
-      "#framework": ["./framework/index.js"],
-      "#framework/*": ["./framework/*"],
+      "vasuzex": ["./framework/index.js"],
+      "vasuzex/*": ["./framework/*"],
       "#models": ["./database/models/index.js"],
       "#models/*": ["./database/models/*"],
       "#database": ["./database/index.js"],
@@ -478,7 +478,7 @@ models/          # Data layer
 ```javascript
 // Good
 import { User } from '#models';
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 // Avoid
 import { User } from '../../database/models/User.js';
@@ -491,7 +491,7 @@ Don't hardcode configuration:
 
 ```javascript
 // Good
-import { Config } from '#framework';
+import { Config } from 'vasuzex';
 const apiUrl = Config.get('app.url');
 
 // Bad

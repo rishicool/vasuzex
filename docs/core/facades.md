@@ -7,7 +7,7 @@ Facades provide a static interface to classes in the [Service Container](service
 Facades let you access container services using simple, static syntax:
 
 ```javascript
-import { DB, Cache, Log } from '#framework';
+import { DB, Cache, Log } from 'vasuzex';
 
 // Instead of this
 const db = app.make('db');
@@ -90,7 +90,7 @@ Vas uzex's facades are inspired by Laravel and provide the same benefits:
 ### DB Facade
 
 ```javascript
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 // Query builder
 const users = await DB.table('users')
@@ -125,7 +125,7 @@ await DB.transaction(async () => {
 ### Cache Facade
 
 ```javascript
-import { Cache } from '#framework';
+import { Cache } from 'vasuzex';
 
 // Store data
 await Cache.put('key', 'value', 3600); // 1 hour
@@ -158,7 +158,7 @@ await Cache.store('file').put('key', 'value');
 ### Auth Facade
 
 ```javascript
-import { Auth } from '#framework';
+import { Auth } from 'vasuzex';
 
 // Attempt login
 const success = await Auth.attempt({
@@ -188,7 +188,7 @@ Auth.once({ email: 'user@example.com', password: 'secret' });
 ### Hash Facade
 
 ```javascript
-import { Hash } from '#framework';
+import { Hash } from 'vasuzex';
 
 // Hash password
 const hashed = await Hash.make('password');
@@ -205,7 +205,7 @@ if (Hash.needsRehash(hashed)) {
 ### Log Facade
 
 ```javascript
-import { Log } from '#framework';
+import { Log } from 'vasuzex';
 
 // Log levels
 Log.emergency('System is down');
@@ -228,7 +228,7 @@ Log.info('Order placed', {
 ### Mail Facade
 
 ```javascript
-import { Mail } from '#framework';
+import { Mail } from 'vasuzex';
 
 // Send email
 await Mail.to('user@example.com')
@@ -258,7 +258,7 @@ await Mail.to('user@example.com')
 ### SMS Facade
 
 ```javascript
-import { SMS } from '#framework';
+import { SMS } from 'vasuzex';
 
 // Send SMS
 await SMS.to('+1234567890')
@@ -274,7 +274,7 @@ await SMS.to(['+1234567890', '+0987654321'])
 ### Storage Facade
 
 ```javascript
-import { Storage } from '#framework';
+import { Storage } from 'vasuzex';
 
 // Store file
 await Storage.put('uploads/file.txt', 'File content');
@@ -300,7 +300,7 @@ await Storage.disk('s3').put('file.txt', 'content');
 ### Queue Facade
 
 ```javascript
-import { Queue } from '#framework';
+import { Queue } from 'vasuzex';
 
 // Dispatch job
 await Queue.push('ProcessUpload', { file: 'photo.jpg' });
@@ -315,7 +315,7 @@ await Queue.pushOn('emails', 'SendWelcomeEmail', { user_id: 1 });
 ### Config Facade
 
 ```javascript
-import { Config } from '#framework';
+import { Config } from 'vasuzex';
 
 // Get value
 const appName = Config.get('app.name');
@@ -338,7 +338,7 @@ if (Config.has('services.stripe')) {
 ### Event Facade
 
 ```javascript
-import { Event } from '#framework';
+import { Event } from 'vasuzex';
 
 // Dispatch event
 Event.dispatch('user.registered', { user });
@@ -355,7 +355,7 @@ Event.subscribe(UserEventSubscriber);
 ### Format Facade
 
 ```javascript
-import { Format } from '#framework';
+import { Format } from 'vasuzex';
 
 // Currency
 Format.currency(1234.56); // ₹1,234.56
@@ -373,7 +373,7 @@ Format.fileSize(1024000); // 1 MB
 ### Location Facade
 
 ```javascript
-import { Location } from '#framework';
+import { Location } from 'vasuzex';
 
 // Geocode address
 const coords = await Location.geocode('Delhi, India');
@@ -393,7 +393,7 @@ const distance = Location.distance(
 ### GeoIP Facade
 
 ```javascript
-import { GeoIP } from '#framework';
+import { GeoIP } from 'vasuzex';
 
 // Get location from IP
 const location = await GeoIP.lookup('8.8.8.8');
@@ -426,7 +426,7 @@ export default createFacade(MyServiceFacade);
 
 ```javascript
 // In a service provider
-import { ServiceProvider } from '#framework';
+import { ServiceProvider } from 'vasuzex';
 import { MyService } from '../services/MyService.js';
 
 export class MyServiceProvider extends ServiceProvider {
@@ -448,7 +448,7 @@ export { default as MyService } from './MyService.js';
 ### Step 4: Use Your Facade
 
 ```javascript
-import { MyService } from '#framework';
+import { MyService } from 'vasuzex';
 
 MyService.doSomething();
 ```
@@ -458,7 +458,7 @@ MyService.doSomething();
 ### Mocking Facades
 
 ```javascript
-import { Cache } from '#framework';
+import { Cache } from 'vasuzex';
 
 // In tests
 describe('UserService', () => {
@@ -477,7 +477,7 @@ describe('UserService', () => {
 ### Spying on Facades
 
 ```javascript
-import { Log } from '#framework';
+import { Log } from 'vasuzex';
 
 test('logs errors', () => {
   const spy = jest.spyOn(Log, 'error');
@@ -497,7 +497,7 @@ Both approaches have their place:
 ### Using Facades (Quick & Clean)
 
 ```javascript
-import { DB, Cache } from '#framework';
+import { DB, Cache } from 'vasuzex';
 
 export class UserService {
   async getUser(id) {
@@ -591,10 +591,10 @@ The `createFacade()` function wraps the class in a Proxy that intercepts all met
 
 ```javascript
 // Good
-import { DB, Cache } from '#framework';
+import { DB, Cache } from 'vasuzex';
 
 // Avoid importing everything
-import * as Framework from '#framework';
+import * as Framework from 'vasuzex';
 ```
 
 ### 2. Don't Overuse Facades
@@ -641,7 +641,7 @@ Vasuzex facades work similarly to Laravel:
 
 | Laravel (PHP) | Vasuzex (Node.js) |
 |---------------|-------------------|
-| `use Illuminate\Support\Facades\DB;` | `import { DB } from '#framework';` |
+| `use Illuminate\Support\Facades\DB;` | `import { DB } from 'vasuzex';` |
 | `DB::table('users')->get();` | `await DB.table('users').get();` |
 | `Cache::put('key', 'value', 60);` | `await Cache.put('key', 'value', 3600);` |
 | `Auth::user();` | `Auth.user();` |

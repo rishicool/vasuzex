@@ -121,7 +121,7 @@ module.exports = {
 ### Using Config Facade
 
 ```javascript
-import { Config } from '#framework';
+import { Config } from 'vasuzex';
 
 // Get a configuration value
 const appName = Config.get('app.name');
@@ -449,7 +449,7 @@ origins: env('CORS_ORIGINS', '').split(',').filter(Boolean),
 Check critical config on app boot:
 
 ```javascript
-import { Application, Config } from '#framework';
+import { Application, Config } from 'vasuzex';
 
 const app = new Application(process.cwd());
 await app.boot();
@@ -497,7 +497,7 @@ module.exports = {
 Access it:
 
 ```javascript
-import { Config } from '#framework';
+import { Config } from 'vasuzex';
 
 const value = Config.get('custom.option1');
 const nested = Config.get('custom.nested.setting');

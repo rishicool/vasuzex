@@ -27,7 +27,7 @@ pnpm add node-fetch
 ### Distance Calculation
 
 ```javascript
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 // Calculate distance between two points
 const distance = Location.calculateDistance(
@@ -48,7 +48,7 @@ const shortDistance = Location.formatDistance(0.5); // "500 m"
 ### Bearing & Direction
 
 ```javascript
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 // Calculate bearing
 const bearing = Location.calculateBearing(
@@ -65,7 +65,7 @@ console.log(`Direction: ${direction}`); // "SW" (Southwest)
 ### Bounding Box
 
 ```javascript
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 // Get bounding box for 10km radius around Delhi
 const box = Location.getBoundingBox(28.6139, 77.2090, 10);
@@ -90,7 +90,7 @@ Install location query methods into GuruORM:
 
 ```javascript
 // In your bootstrap file
-import { installLocationMethods } from '#framework/Services/Location';
+import { installLocationMethods } from 'vasuzex/Services/Location';
 import { QueryBuilder } from '#database';
 
 // Install methods
@@ -101,7 +101,7 @@ Or use LocationServiceProvider (automatic):
 
 ```javascript
 // framework/Foundation/Application.js
-import LocationServiceProvider from '#framework/Services/Location/LocationServiceProvider.js';
+import LocationServiceProvider from 'vasuzex/Services/Location/LocationServiceProvider.js';
 
 app.register(new LocationServiceProvider(app));
 await app.boot();
@@ -221,7 +221,7 @@ module.exports = {
 ### Address to Coordinates
 
 ```javascript
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 // Geocode address
 const result = await Location.geocode('Connaught Place, New Delhi');
@@ -239,7 +239,7 @@ console.log(result);
 ### Coordinates to Address
 
 ```javascript
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 // Reverse geocode
 const address = await Location.reverseGeocode(28.6315, 77.2167);
@@ -250,7 +250,7 @@ console.log(address.formatted_address);
 ### Find Nearby Places
 
 ```javascript
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 // Find nearby restaurants
 const restaurants = await Location.findNearbyPlaces(
@@ -281,7 +281,7 @@ console.log(restaurants);
 
 ```javascript
 import db from '#database';
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 export async function getNearbyRestaurants(userLat, userLon, radius = 5) {
   const restaurants = await db.table('restaurants')
@@ -325,7 +325,7 @@ export async function findNearbyDrivers(userLat, userLon, maxDistance = 3) {
 
 ```javascript
 import db from '#database';
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 export async function storeLocator(req, res) {
   const { address, radius = 10 } = req.query;
@@ -358,7 +358,7 @@ export async function storeLocator(req, res) {
 ### 4. Geofencing - Check if User is in Area
 
 ```javascript
-import { Location } from '#framework/Support/Facades';
+import { Location } from 'vasuzex/Support/Facades';
 
 export function isUserInDeliveryZone(userLat, userLon, storeLat, storeLon, deliveryRadius = 5) {
   const distance = Location.calculateDistance(userLat, userLon, storeLat, storeLon);

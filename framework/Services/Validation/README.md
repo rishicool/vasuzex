@@ -21,7 +21,7 @@ The Validation service is automatically available through dependency injection.
 ### Using the Validator Facade
 
 ```javascript
-import { Validator } from '#framework';
+import { Validator } from 'vasuzex';
 
 const data = {
   name: 'John Doe',
