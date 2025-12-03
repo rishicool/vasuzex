@@ -6,8 +6,8 @@
  * Run: node examples/location-example.js
  */
 
-import { Location } from '#framework/Support/Facades';
-import app from '#framework/Foundation/Application.js';
+import { Location } from 'vasuzex/Support/Facades';
+import app from 'vasuzex/Foundation/Application.js';
 import db from '#database';
 
 // Bootstrap application

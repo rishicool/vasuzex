@@ -4,7 +4,7 @@
  * Run: node examples/indian-validators-example.js
  */
 
-import { IndianValidators } from '#framework/Services/Validation/IndianValidators.js';
+import { IndianValidators } from 'vasuzex/Services/Validation/IndianValidators.js';
 
 console.log('═══════════════════════════════════════════════════');
 console.log('        INDIAN VALIDATORS EXAMPLES');
@@ -206,7 +206,7 @@ voterIds.forEach(voterId => {
 // ============================================
 console.log('\n\n11. INTEGRATION WITH VALIDATION FACTORY\n');
 
-import { ValidationFactory } from '#framework/Services/Validation/ValidationFactory.js';
+import { ValidationFactory } from 'vasuzex/Services/Validation/ValidationFactory.js';
 
 const validator = new ValidationFactory();
 

@@ -6,7 +6,7 @@
  * Run: node examples/upload-example.js
  */
 
-import { Upload, FileValidator } from '#framework';
+import { Upload, FileValidator } from 'vasuzex';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 

@@ -4,9 +4,9 @@
  * Run: node examples/formatter-example.js
  */
 
-import { Format } from '#framework/Support/Facades/Format.js';
-import { Application } from '#framework/Foundation/Application.js';
-import { FormatterServiceProvider } from '#framework/Services/Formatter/FormatterServiceProvider.js';
+import { Format } from 'vasuzex/Support/Facades/Format.js';
+import { Application } from 'vasuzex/Foundation/Application.js';
+import { FormatterServiceProvider } from 'vasuzex/Services/Formatter/FormatterServiceProvider.js';
 
 // Bootstrap application
 const app = new Application('/Users/rishi/Desktop/work/vasuzex');

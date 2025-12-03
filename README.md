@@ -24,7 +24,7 @@ That's it! Your app is running on `http://localhost:3000` 🎉
 - **📦 GuruORM Built-in** - Eloquent-style ORM included (no separate install)
 - **🎨 Laravel-Inspired** - Familiar structure for PHP developers
 - **🔧 Starter Apps** - Blog API & Media Server ready to use
-- **📁 Import Aliases** - Clean imports: `#framework`, `#models`, `#config`
+- **📁 Import Aliases** - Clean imports: `vasuzex`, `#models`, `#config`
 - **💾 Database Ready** - PostgreSQL, MySQL, SQLite support
 - **🔐 Authentication** - Guards, middleware, hashing built-in
 - **📧 Services** - Mail, SMS, Cache, Queue, Storage, Upload
@@ -68,7 +68,7 @@ import {
   Auth,
   Hash,
   Log
-} from '#framework';
+} from 'vasuzex';
 
 import { Post, User } from '#models';
 
@@ -90,7 +90,7 @@ Log.info('App started');
 
 ```javascript
 // Framework imports
-import { DB, Cache, Auth } from '#framework';
+import { DB, Cache, Auth } from 'vasuzex';
 
 // Models
 import { Post, User, Comment } from '#models';
@@ -109,7 +109,7 @@ See [Import Aliases Guide](./docs/IMPORT_ALIASES.md) for complete documentation.
 ### Database (DB Facade)
 
 ```javascript
-import { DB } from '#framework';
+import { DB } from 'vasuzex';
 
 // Query builder
 const users = await DB.table('users').where('active', true).get();
@@ -151,7 +151,7 @@ await user.forceDelete(); // Permanent delete
 ### Cache
 
 ```javascript
-import { Cache } from '#framework';
+import { Cache } from 'vasuzex';
 
 // Store
 await Cache.put('key', 'value', 3600); // 1 hour
@@ -168,7 +168,7 @@ const posts = await Cache.remember('posts', 3600, async () => {
 ### Auth
 
 ```javascript
-import { Auth, Hash } from '#framework';
+import { Auth, Hash } from 'vasuzex';
 
 // Attempt login
 await Auth.attempt({ email: 'user@example.com', password: 'secret' });
@@ -184,7 +184,7 @@ const valid = await Hash.check('password', hashed);
 ### Logging
 
 ```javascript
-import { Log } from '#framework';
+import { Log } from 'vasuzex';
 
 Log.info('User logged in', { user_id: 123 });
 Log.error('Error occurred', { error: err.message });

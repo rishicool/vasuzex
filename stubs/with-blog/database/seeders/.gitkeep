@@ -1,0 +1,5 @@
+# Database seeders go here
+
+Generate with: `npx vasuzex make:seeder SeederName`
+
+Run with: `pnpm db:seed`

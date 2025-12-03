@@ -3,7 +3,7 @@
  * Extends framework Controller with app-specific helpers
  */
 
-import { Controller } from '@vasuzex/framework/Http/Controller.js';
+import { Controller } from 'vasuzex/Http/Controller.js';
 
 export class BaseController extends Controller {
   /**

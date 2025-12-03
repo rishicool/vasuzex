@@ -3,7 +3,32 @@
   "version": "1.0.0",
   "description": "Laravel-inspired framework for Node.js monorepos",
   "type": "module",
-  "packageManager": "pnpm@10.22.0",
+  "main": "./framework/index.js",
+  "exports": {
+    ".": "./framework/index.js",
+    "./Foundation": "./framework/Foundation/index.js",
+    "./Foundation/*": "./framework/Foundation/*.js",
+    "./Database": "./framework/Database/index.js",
+    "./Database/*": "./framework/Database/*.js",
+    "./Http": "./framework/Http/index.js",
+    "./Http/*": "./framework/Http/*.js",
+    "./Support": "./framework/Support/index.js",
+    "./Support/*": "./framework/Support/*.js",
+    "./Support/Facades": "./framework/Support/Facades/index.js",
+    "./Services/*": "./framework/Services/*/index.js",
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "create-vasuzex": "./bin/create-vasuzex.js",
+    "vasuzex": "./framework/Console/cli.js"
+  },
+  "files": [
+    "framework",
+    "bin",
+    "stubs",
+    "README.md",
+    "LICENSE"
+  ],
   "imports": {
     "#framework": "./framework/index.js",
     "#framework/*": "./framework/*",
@@ -14,41 +39,10 @@
     "#config": "./config/index.cjs",
     "#config/*": "./config/*"
   },
-  "bin": {
-    "create-vasuzex": "./bin/create-vasuzex.js",
-    "vasuzex": "./framework/Console/cli.js"
-  },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
-    "framework": "node framework/Console/cli.js",
-    "dev": "dotenv -e .env -- turbo run dev --parallel",
-    "dev:media": "cd apps/media-server && pnpm dev",
-    "build": "turbo run build",
-    "start": "turbo run start",
-    "start:blog": "turbo run start --filter=blog-api",
-    "start:todo": "turbo run start --filter=todo-api",
-    "db:migrate": "cd database && npx guruorm db:migrate",
-    "db:migrate:status": "cd database && npx guruorm db:migrate:status",
-    "db:seed": "cd database && npx guruorm db:seed",
-    "db:reset": "pnpm db:migrate && pnpm db:seed",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint -- --fix",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "clean:cache": "turbo run clean && rm -rf .turbo node_modules/.cache",
-    "clean:all": "pnpm clean:cache && find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && find . -name 'dist' -type d -prune -exec rm -rf '{}' +",
-    "format": "prettier --write \"**/*.{js,json,md}\"",
-    "preinstall": "npx only-allow pnpm",
-    "dev:blog-api": "turbo run dev --filter=blog-api",
-    "start:blog-api": "turbo run start --filter=blog-api",
-    "dev:media-server": "turbo run dev --filter=media-server",
-    "start:media-server": "turbo run start --filter=media-server",
-    "dev:blog-api-api": "turbo run dev --filter=blog-api-api",
-    "start:blog-api-api": "turbo run start --filter=blog-api-api",
-    "dev:blog-api-web": "turbo run dev --filter=blog-api-web",
-    "start:blog-api-web": "turbo run start --filter=blog-api-web",
-    "vasuzex": "node framework/Console/cli.js"
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "keywords": [
     "framework",

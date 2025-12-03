@@ -4,8 +4,8 @@
  * 
  * @example
  * // In app initialization
- * import { ConfigService } from '@vasuzex/framework';
- * import { getDatabase } from '@vasuzex/database';
+ * import { ConfigService } from 'vasuzex';
+ * import { getDatabase } from 'vasuzex/Database';
  * 
  * const DB = await getDatabase();
  * const appConfig = new ConfigService({ table: 'app_configs', env: 'production' });

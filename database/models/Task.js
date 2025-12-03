@@ -1,4 +1,4 @@
-import Model from '@vasuzex/framework/Database/Model.js';
+import Model from 'vasuzex/Database/Model.js';
 
 export class Task extends Model {
   static tableName = 'tasks';

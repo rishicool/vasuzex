@@ -66,7 +66,7 @@ async function generateSingleApp(name, type) {
         start: 'node src/index.js',
       },
       dependencies: {
-        '@vasuzex/framework': 'workspace:*',
+        vasuzex: '^1.0.0',
         guruorm: '^1.17.6',
         express: '^4.21.2',
         cors: '^2.8.5',
@@ -136,7 +136,7 @@ module.exports = {
  * ${name.charAt(0).toUpperCase() + name.slice(1)} ${type.toUpperCase()} Application
  */
 
-import { Application } from '@vasuzex/framework/Foundation/Application.js';
+import { Application } from 'vasuzex/Foundation/Application.js';
 
 // Create application instance
 const app = new Application(process.cwd());
@@ -169,7 +169,7 @@ export default app;
  * Extends framework Controller with app-specific helpers
  */
 
-import { Controller } from '@vasuzex/framework/Http/Controller.js';
+import { Controller } from 'vasuzex/Http/Controller.js';
 
 export class BaseController extends Controller {
   /**

@@ -1,0 +1,5 @@
+# Generated apps go here
+
+Generate with: `npx vasuzex generate:app app-name`
+
+Each app can be a microservice with its own routes, controllers, and logic.

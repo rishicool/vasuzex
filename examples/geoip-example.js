@@ -10,8 +10,8 @@
  * 4. Run: node examples/geoip-example.js
  */
 
-import { GeoIP } from '#framework/Support/Facades';
-import app from '#framework/Foundation/Application.js';
+import { GeoIP } from 'vasuzex/Support/Facades';
+import app from 'vasuzex/Foundation/Application.js';
 
 // Bootstrap application
 await app.boot();
