@@ -15,7 +15,8 @@
     "#config/*": "./config/*"
   },
   "bin": {
-    "create-vasuzex": "./bin/create-vasuzex.js"
+    "create-vasuzex": "./bin/create-vasuzex.js",
+    "vasuzex": "./framework/Console/cli.js"
   },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
@@ -41,12 +42,13 @@
     "preinstall": "npx only-allow pnpm",
     "dev:blog-api": "turbo run dev --filter=blog-api",
     "start:blog-api": "turbo run start --filter=blog-api",
-    "dev:media-server": "turbo run dev --filter=@vasuzex/media-server",
-    "start:media-server": "turbo run start --filter=@vasuzex/media-server",
+    "dev:media-server": "turbo run dev --filter=media-server",
+    "start:media-server": "turbo run start --filter=media-server",
     "dev:blog-api-api": "turbo run dev --filter=blog-api-api",
     "start:blog-api-api": "turbo run start --filter=blog-api-api",
     "dev:blog-api-web": "turbo run dev --filter=blog-api-web",
-    "start:blog-api-web": "turbo run start --filter=blog-api-web"
+    "start:blog-api-web": "turbo run start --filter=blog-api-web",
+    "vasuzex": "node framework/Console/cli.js"
   },
   "keywords": [
     "framework",

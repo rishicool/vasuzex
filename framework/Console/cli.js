@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Neastore Framework CLI
+ * Vasuzex Framework CLI
  * Laravel-style CLI for generating apps and services
  */
 
@@ -25,8 +25,8 @@ import {
 const program = new Command();
 
 program
-  .name('framework')
-  .description('Neastore Framework CLI')
+  .name('vasuzex')
+  .description('Vasuzex Framework CLI')
   .version('1.0.0');
 
 // Generate media-server
@@ -72,8 +72,8 @@ program
     } else {
       console.error(`Unknown target: ${target}`);
       console.log('Usage:');
-      console.log('  framework generate media-server');
-      console.log('  framework generate app=<name>');
+      console.log('  vasuzex generate media-server');
+      console.log('  vasuzex generate app=<name>');
       process.exit(1);
     }
   });

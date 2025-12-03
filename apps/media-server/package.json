@@ -1,5 +1,5 @@
 {
-  "name": "@vasuzex/media-server",
+  "name": "media-server",
   "version": "1.0.0",
   "description": "Centralized media server for dynamic thumbnail generation",
   "type": "module",

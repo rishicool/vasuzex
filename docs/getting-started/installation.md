@@ -49,13 +49,64 @@ Your app is now running at `http://localhost:3000`! 🎉
 
 ## Available Commands
 
+### Database Commands
 ```bash
-pnpm dev          # Start development server
+# Using GuruORM directly
+cd database
+npx guruorm db:migrate        # Run migrations
+npx guruorm db:migrate:status # Check migration status
+npx guruorm db:seed           # Seed database
+npx guruorm make:migration CreateUsersTable
+npx guruorm make:seeder UserSeeder
+
+# Or using package scripts
+pnpm db:migrate
+pnpm db:seed
+pnpm db:reset                 # Migrate + seed
+```
+
+### Framework Commands
+```bash
+# Generate new app
+npx vasuzex generate:app my-app
+npx vasuzex generate:app my-app --type api
+npx vasuzex generate:app my-app --type web
+
+# Generate media server
+npx vasuzex generate:media-server
+npx vasuzex generate:media-server --port 4003
+
+# Database operations via framework
+npx vasuzex db:create
+npx vasuzex migrate
+npx vasuzex migrate:status
+npx vasuzex migrate:rollback
+npx vasuzex db:seed
+npx vasuzex migrate:fresh --seed
+
+# Make files
+npx vasuzex make:migration CreatePostsTable
+npx vasuzex make:seeder PostSeeder
+npx vasuzex make:model Post --migration
+
+# Delete app
+npx vasuzex delete:app my-app
+npx vasuzex delete:app my-app --type api
+
+# Add dependencies
+npx vasuzex add:dep axios lodash
+npx vasuzex add:dep jest --dev
+```
+
+### Development Commands
+```bash
+pnpm dev          # Start all apps in parallel
+pnpm dev:media    # Start media server only
+pnpm build        # Build all apps
 pnpm start        # Start production server
-pnpm db:migrate   # Run database migrations
-pnpm db:seed      # Seed database
-pnpm db:fresh     # Fresh migration with seeding
 pnpm test         # Run tests
+pnpm lint         # Lint code
+pnpm format       # Format code
 ```
 
 ## What You Get
