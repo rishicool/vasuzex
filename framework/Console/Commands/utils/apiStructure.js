@@ -11,12 +11,15 @@ import {
 import {
   generateBaseControllerTemplate,
   generateAuthControllerTemplate,
+  generatePostControllerTemplate,
+  generateCommentControllerTemplate,
   generateUserModelTemplate,
   generateAuthServiceTemplate,
   generateAuthMiddlewareTemplate,
   generateErrorHandlerTemplate,
   generateAuthRequestsTemplate,
   generateAuthRoutesTemplate,
+  generatePostRoutesTemplate,
   generateRoutesIndexTemplate,
 } from './apiTemplates.js';
 
@@ -50,6 +53,18 @@ export async function generateAPIControllers(targetDir) {
   await writeFileContent(
     join(targetDir, 'src/controllers/AuthController.js'),
     generateAuthControllerTemplate()
+  );
+  
+  // PostController
+  await writeFileContent(
+    join(targetDir, 'src/controllers/PostController.js'),
+    generatePostControllerTemplate()
+  );
+  
+  // CommentController
+  await writeFileContent(
+    join(targetDir, 'src/controllers/CommentController.js'),
+    generateCommentControllerTemplate()
   );
 }
 
@@ -111,6 +126,12 @@ export async function generateAPIRoutes(targetDir) {
   await writeFileContent(
     join(targetDir, 'src/routes/auth.routes.js'),
     generateAuthRoutesTemplate()
+  );
+  
+  // Post routes
+  await writeFileContent(
+    join(targetDir, 'src/routes/post.routes.js'),
+    generatePostRoutesTemplate()
   );
   
   // Routes index

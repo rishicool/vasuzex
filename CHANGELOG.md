@@ -5,6 +5,20 @@ All notable changes to Vasuzex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.8] - 2025-12-04
+
+### Fixed
+- **CRITICAL**: Fixed Vite index.html location - moved from `public/index.html` to root `index.html`
+- React/Vue/Svelte apps now properly serve on browser (404 issue resolved)
+
+### Added
+- Full Blog CRUD functionality with proper backend integration
+- PostController with create, read, update, delete operations
+- Post model with validation
+- Blog routes with authentication middleware
+- Comment functionality for posts
+- Proper error handling and validation
+
 ## [1.0.7] - 2025-12-04
 
 ### Fixed

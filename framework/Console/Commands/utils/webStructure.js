@@ -68,7 +68,8 @@ export async function generateCompleteWebStructure(targetDir, appName, framework
 export async function generateReactApp(targetDir, appName) {
   const { indexHtml, appJs, indexJs, indexCss } = generateReactTemplate(appName);
   
-  await writeFileContent(join(targetDir, 'public/index.html'), indexHtml);
+  // Vite expects index.html at root, not in public/
+  await writeFileContent(join(targetDir, 'index.html'), indexHtml);
   await writeFileContent(join(targetDir, 'src/App.jsx'), appJs);
   await writeFileContent(join(targetDir, 'src/index.jsx'), indexJs);
   await writeFileContent(join(targetDir, 'src/index.css'), indexCss);
@@ -82,7 +83,8 @@ export async function generateReactApp(targetDir, appName) {
 export async function generateVueApp(targetDir, appName) {
   const { indexHtml, appVue, mainJs } = generateVueTemplate(appName);
   
-  await writeFileContent(join(targetDir, 'public/index.html'), indexHtml);
+  // Vite expects index.html at root
+  await writeFileContent(join(targetDir, 'index.html'), indexHtml);
   await writeFileContent(join(targetDir, 'src/App.vue'), appVue);
   await writeFileContent(join(targetDir, 'src/main.js'), mainJs);
   await writeFileContent(join(targetDir, 'vite.config.js'), generateViteConfig('vue'));
@@ -95,7 +97,8 @@ export async function generateVueApp(targetDir, appName) {
 export async function generateSvelteApp(targetDir, appName) {
   const { indexHtml, appSvelte, mainJs } = generateSvelteTemplate(appName);
   
-  await writeFileContent(join(targetDir, 'public/index.html'), indexHtml);
+  // Vite expects index.html at root
+  await writeFileContent(join(targetDir, 'index.html'), indexHtml);
   await writeFileContent(join(targetDir, 'src/App.svelte'), appSvelte);
   await writeFileContent(join(targetDir, 'src/main.js'), mainJs);
   await writeFileContent(join(targetDir, 'vite.config.js'), generateViteConfig('svelte'));

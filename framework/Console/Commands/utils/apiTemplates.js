@@ -416,6 +416,7 @@ export function generateRoutesIndexTemplate() {
  */
 
 import { authRoutes } from './auth.routes.js';
+import postRoutes from './post.routes.js';
 
 /**
  * Health check route (can be used separately)
@@ -437,10 +438,278 @@ export function getAllRoutes() {
   return [
     { path: '/health', handler: healthRoutes },
     { path: '/api/auth', router: authRoutes },
+    { path: '/api/posts', router: postRoutes },
     // Add more routes here as your app grows
     // { path: '/api/users', router: userRoutes },
-    // { path: '/api/posts', router: postRoutes },
   ];
 }
+`;
+}
+
+/**
+ * Generate PostController
+ */
+export function generatePostControllerTemplate() {
+  return `/**
+ * Post Controller
+ * Handles blog post CRUD operations
+ */
+
+import { BaseController } from './BaseController.js';
+import { Post } from '../../../database/models/Post.js';
+import { Comment } from '../../../database/models/Comment.js';
+
+export class PostController extends BaseController {
+  /**
+   * Get all posts with pagination
+   */
+  async index(req, res) {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const perPage = parseInt(req.query.perPage) || 15;
+      const offset = (page - 1) * perPage;
+
+      const posts = await Post.query()
+        .select(['id', 'title', 'slug', 'excerpt', 'created_at', 'updated_at'])
+        .orderBy('created_at', 'DESC')
+        .limit(perPage)
+        .offset(offset);
+
+      const total = await Post.query().count();
+
+      return this.paginate(res, posts, total[0].count, page, perPage);
+    } catch (error) {
+      return this.error(res, error.message, 500);
+    }
+  }
+
+  /**
+   * Get single post by slug
+   */
+  async show(req, res) {
+    try {
+      const { slug } = req.params;
+
+      const post = await Post.query()
+        .where('slug', slug)
+        .first();
+
+      if (!post) {
+        return this.error(res, 'Post not found', 404);
+      }
+
+      // Get comments for this post
+      const comments = await Comment.query()
+        .where('post_id', post.id)
+        .orderBy('created_at', 'DESC');
+
+      return this.success(res, {
+        ...post,
+        comments
+      });
+    } catch (error) {
+      return this.error(res, error.message, 500);
+    }
+  }
+
+  /**
+   * Create new post
+   */
+  async store(req, res) {
+    try {
+      const { title, content, excerpt } = req.body;
+
+      // Generate slug from title
+      const slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
+      const post = await Post.create({
+        title,
+        slug,
+        content,
+        excerpt: excerpt || content.substring(0, 200) + '...',
+      });
+
+      return this.success(res, post, 201);
+    } catch (error) {
+      return this.error(res, error.message, 500);
+    }
+  }
+
+  /**
+   * Update post
+   */
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+      const { title, content, excerpt } = req.body;
+
+      const post = await Post.query()
+        .where('id', id)
+        .first();
+
+      if (!post) {
+        return this.error(res, 'Post not found', 404);
+      }
+
+      // Update slug if title changed
+      const updateData = { content, excerpt };
+      if (title && title !== post.title) {
+        updateData.title = title;
+        updateData.slug = title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '');
+      }
+
+      await Post.query()
+        .where('id', id)
+        .update(updateData);
+
+      const updatedPost = await Post.query()
+        .where('id', id)
+        .first();
+
+      return this.success(res, updatedPost);
+    } catch (error) {
+      return this.error(res, error.message, 500);
+    }
+  }
+
+  /**
+   * Delete post
+   */
+  async destroy(req, res) {
+    try {
+      const { id } = req.params;
+
+      const post = await Post.query()
+        .where('id', id)
+        .first();
+
+      if (!post) {
+        return this.error(res, 'Post not found', 404);
+      }
+
+      // Delete associated comments first
+      await Comment.query()
+        .where('post_id', id)
+        .delete();
+
+      // Delete post
+      await Post.query()
+        .where('id', id)
+        .delete();
+
+      return this.success(res, { message: 'Post deleted successfully' });
+    } catch (error) {
+      return this.error(res, error.message, 500);
+    }
+  }
+}
+`;
+}
+
+/**
+ * Generate CommentController
+ */
+export function generateCommentControllerTemplate() {
+  return `/**
+ * Comment Controller
+ * Handles comment operations
+ */
+
+import { BaseController } from './BaseController.js';
+import { Comment } from '../../../database/models/Comment.js';
+import { Post } from '../../../database/models/Post.js';
+
+export class CommentController extends BaseController {
+  /**
+   * Add comment to post
+   */
+  async store(req, res) {
+    try {
+      const { post_id, author, content } = req.body;
+
+      // Verify post exists
+      const post = await Post.query()
+        .where('id', post_id)
+        .first();
+
+      if (!post) {
+        return this.error(res, 'Post not found', 404);
+      }
+
+      const comment = await Comment.create({
+        post_id,
+        author,
+        content,
+      });
+
+      return this.success(res, comment, 201);
+    } catch (error) {
+      return this.error(res, error.message, 500);
+    }
+  }
+
+  /**
+   * Delete comment
+   */
+  async destroy(req, res) {
+    try {
+      const { id } = req.params;
+
+      const comment = await Comment.query()
+        .where('id', id)
+        .first();
+
+      if (!comment) {
+        return this.error(res, 'Comment not found', 404);
+      }
+
+      await Comment.query()
+        .where('id', id)
+        .delete();
+
+      return this.success(res, { message: 'Comment deleted successfully' });
+    } catch (error) {
+      return this.error(res, error.message, 500);
+    }
+  }
+}
+`;
+}
+
+/**
+ * Generate Post routes
+ */
+export function generatePostRoutesTemplate() {
+  return `/**
+ * Post Routes
+ * API routes for blog posts
+ */
+
+import express from 'express';
+import { PostController } from '../controllers/PostController.js';
+import { CommentController } from '../controllers/CommentController.js';
+
+const router = express.Router();
+const postController = new PostController();
+const commentController = new CommentController();
+
+// Post routes
+router.get('/', (req, res) => postController.index(req, res));
+router.get('/:slug', (req, res) => postController.show(req, res));
+router.post('/', (req, res) => postController.store(req, res));
+router.put('/:id', (req, res) => postController.update(req, res));
+router.delete('/:id', (req, res) => postController.destroy(req, res));
+
+// Comment routes
+router.post('/comments', (req, res) => commentController.store(req, res));
+router.delete('/comments/:id', (req, res) => commentController.destroy(req, res));
+
+export default router;
 `;
 }
