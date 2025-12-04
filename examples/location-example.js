@@ -7,7 +7,7 @@
  */
 
 import { Location } from 'vasuzex/Support/Facades';
-import app from 'vasuzex/Foundation/Application.js';
+import app from 'vasuzex/Foundation/Application';
 import db from '#database';
 
 // Bootstrap application

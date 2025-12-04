@@ -11,8 +11,8 @@
  * Run: node examples/sms-example.js
  */
 
-import { Application } from 'vasuzex/Foundation/Application.js';
-import { SMS, Queue, Cache, Validator } from 'vasuzex/Support/Facades/index.js';
+import { Application } from 'vasuzex/Foundation/Application';
+import { SMS, Queue, Cache, Validator } from 'vasuzex/Support/Facades';
 import { randomInt } from 'crypto';
 
 // Initialize application

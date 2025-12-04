@@ -91,7 +91,7 @@ console.log(isUS); // true
 ### Using Service Directly
 
 ```javascript
-import app from 'vasuzex/Foundation/Application.js';
+import app from 'vasuzex/Foundation/Application';
 
 const geoip = app.make('geoip');
 

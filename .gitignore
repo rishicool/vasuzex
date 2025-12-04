@@ -58,3 +58,4 @@ Thumbs.db
 # App-specific node_modules
 apps/*/node_modules/
 framework/node_modules/
+vasuzex-final-test/

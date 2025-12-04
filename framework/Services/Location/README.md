@@ -101,7 +101,7 @@ Or use LocationServiceProvider (automatic):
 
 ```javascript
 // framework/Foundation/Application.js
-import LocationServiceProvider from 'vasuzex/Services/Location/LocationServiceProvider.js';
+import LocationServiceProvider from 'vasuzex/Services/Location/LocationServiceProvider';
 
 app.register(new LocationServiceProvider(app));
 await app.boot();

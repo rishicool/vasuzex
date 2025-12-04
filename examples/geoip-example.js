@@ -11,7 +11,7 @@
  */
 
 import { GeoIP } from 'vasuzex/Support/Facades';
-import app from 'vasuzex/Foundation/Application.js';
+import app from 'vasuzex/Foundation/Application';
 
 // Bootstrap application
 await app.boot();

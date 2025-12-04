@@ -76,8 +76,8 @@ import {
 } from 'vasuzex';
 
 // Or individually
-import DB from 'vasuzex/Support/Facades/DB.js';
-import Cache from 'vasuzex/Support/Facades/Cache.js';
+import DB from 'vasuzex/Support/Facades/DB';
+import Cache from 'vasuzex/Support/Facades/Cache';
 ```
 
 ### Import Models
@@ -98,10 +98,10 @@ import { User } from '#models/User.js';
 import { getDatabase } from '#database';
 
 // Model base class
-import Model from 'vasuzex/Database/Model.js';
+import Model from 'vasuzex/Database/Model';
 
 // Relations
-import { Relations } from 'vasuzex/Database/Relations.js';
+import { Relations } from 'vasuzex/Database/Relations';
 ```
 
 ### Import Configuration
@@ -124,7 +124,7 @@ import {
 } from 'vasuzex';
 
 // Or specific provider
-import { AuthServiceProvider } from 'vasuzex/Foundation/Providers/AuthServiceProvider.js';
+import { AuthServiceProvider } from 'vasuzex/Foundation/Providers/AuthServiceProvider';
 ```
 
 ## Complete Application Example
@@ -206,8 +206,8 @@ express.listen(PORT, () => {
  * database/models/Post.js
  */
 
-import Model from 'vasuzex/Database/Model.js';
-import { Relations } from 'vasuzex/Database/Relations.js';
+import Model from 'vasuzex/Database/Model';
+import { Relations } from 'vasuzex/Database/Relations';
 import { Comment } from '#models/Comment.js';
 
 export class Post extends Model {
