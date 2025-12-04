@@ -1,0 +1,11 @@
+{
+  "name": "blog-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Blog API - Hybrid approach (no dependencies, uses root)",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "vasuzex",
+  "version": "1.0.11",
+  "description": "Laravel-inspired framework for Node.js (Laravel-Style Bundle)",
+  "type": "module",
+  "main": "./framework/index.js",
+  "exports": {
+    ".": "./framework/index.js",
+    "./Database": "./framework/Database/index.js",
+    "./Database/*": "./framework/Database/*.js",
+    "./Http": "./framework/Http/index.js",
+    "./Http/*": "./framework/Http/*.js",
+    "./Support": "./framework/Support/index.js",
+    "./Support/*": "./framework/Support/*.js",
+    "./Support/Facades": "./framework/Support/Facades/index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "cors": "^2.8.5",
+    "helmet": "^8.1.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "joi": "^17.13.3",
+    "guruorm": "^2.0.0",
+    "axios": "^1.13.2",
+    "chalk": "^5.6.2",
+    "dotenv": "^16.6.1",
+    "multer": "^2.0.2",
+    "sharp": "^0.33.5",
+    "maxmind": "^5.0.1",
+    "pg": "^8.16.3"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "vue": ">=3.0.0",
+    "svelte": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true },
+    "vue": { "optional": true },
+    "svelte": { "optional": true }
+  },
+  "keywords": ["framework", "laravel", "nodejs", "monorepo"],
+  "author": "Vasuzex Team",
+  "license": "MIT"
+}

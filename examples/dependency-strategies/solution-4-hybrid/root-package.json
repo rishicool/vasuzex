@@ -1,0 +1,54 @@
+{
+  "name": "my-vasuzex-project-hybrid",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Example project using Hybrid dependency management",
+  "workspaces": [
+    "apps/**/api",
+    "apps/**/web",
+    "apps/media-server"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "db:migrate": "vasuzex migrate",
+    "dev:blog-api": "turbo run dev --filter=blog-api",
+    "dev:blog-web": "turbo run dev --filter=blog-web",
+    "dev:shop-api": "turbo run dev --filter=shop-api",
+    "dev:shop-web": "turbo run dev --filter=shop-web",
+    "dev:media-server": "turbo run dev --filter=@vasuzex/media-server"
+  },
+  "dependencies": {
+    "vasuzex": "^1.0.11",
+    "guruorm": "^2.0.0",
+    "express": "^5.2.1",
+    "cors": "^2.8.5",
+    "helmet": "^8.1.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "joi": "^17.13.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vue": "^3.4.0",
+    "svelte": "^4.2.0",
+    "axios": "^1.13.2",
+    "sharp": "^0.33.5",
+    "multer": "^2.0.2",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "turbo": "^2.6.1",
+    "nodemon": "^3.1.11",
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "@sveltejs/vite-plugin-svelte": "^3.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "express": "^5.2.1",
+      "react": "^18.2.0",
+      "vue": "^3.4.0"
+    }
+  }
+}

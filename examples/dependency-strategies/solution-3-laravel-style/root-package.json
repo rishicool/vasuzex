@@ -1,0 +1,23 @@
+{
+  "name": "my-vasuzex-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Example project using Laravel-style dependency bundling",
+  "workspaces": [
+    "apps/**/api",
+    "apps/**/web"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "db:migrate": "vasuzex migrate",
+    "dev:blog-api": "turbo run dev --filter=blog-api",
+    "dev:blog-web": "turbo run dev --filter=blog-web",
+    "dev:shop-api": "turbo run dev --filter=shop-api",
+    "dev:shop-web": "turbo run dev --filter=shop-web"
+  },
+  "devDependencies": {
+    "turbo": "^2.6.1",
+    "nodemon": "^3.1.11"
+  }
+}

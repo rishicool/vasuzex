@@ -1,0 +1,14 @@
+{
+  "name": "blog-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Blog API - Laravel style (only vasuzex dependency)",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "vasuzex": "^1.0.11"
+  }
+}
