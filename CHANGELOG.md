@@ -5,6 +5,15 @@ All notable changes to Vasuzex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] - 2025-12-04
+
+### Fixed
+- **CRITICAL**: Fixed double `.js` extension bug in database model imports
+  - Changed: `import Model from 'vasuzex/Database/Model.js'` → `import Model from 'vasuzex/Database/Model'`
+  - Changed: `import { Hash } from 'vasuzex/Support/Facades/index.js'` → `import { Hash } from 'vasuzex/Support/Facades'`
+  - This was causing `Model.js.js` resolution errors in fresh projects
+  - Affected files: User.js, Post.js, Comment.js, Task.js
+
 ## [1.0.4] - 2025-12-04
 
 ### Added

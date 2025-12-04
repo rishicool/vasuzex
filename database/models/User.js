@@ -1,5 +1,5 @@
-import Model from 'vasuzex/Database/Model.js';
-import { Hash } from 'vasuzex/Support/Facades/index.js';
+import Model from 'vasuzex/Database/Model';
+import { Hash } from 'vasuzex/Support/Facades';
 
 export class User extends Model {
   static tableName = 'users';

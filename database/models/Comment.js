@@ -1,4 +1,4 @@
-import Model from 'vasuzex/Database/Model.js';
+import Model from 'vasuzex/Database/Model';
 import { Relations } from 'vasuzex/Database/Relations.js';
 import { Post } from './Post.js';
 
