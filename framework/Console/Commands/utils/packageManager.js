@@ -172,6 +172,9 @@ export async function addRootScripts(appName, appType) {
       scriptsAdded.push(`pnpm ${startScriptName}`);
     }
     
+    // Update combined dev/start scripts to run all apps
+    updateCombinedScripts(rootPkg);
+    
     if (scriptsAdded.length > 0) {
       await writeJsonFile(rootPkgPath, rootPkg);
       console.log(`\n✅ Added scripts: ${scriptsAdded.join(', ')}`);
@@ -228,9 +231,32 @@ export async function addMediaServerScripts() {
     rootPkg.scripts['dev:media-server'] = 'turbo run dev --filter=@vasuzex/media-server';
     rootPkg.scripts['start:media-server'] = 'turbo run start --filter=@vasuzex/media-server';
     
+    // Update combined dev/start scripts to run all apps
+    updateCombinedScripts(rootPkg);
+    
     await writeJsonFile(rootPkgPath, rootPkg);
     console.log('✅ Added scripts: pnpm dev:media-server, pnpm start:media-server');
   } catch (error) {
     console.log('⚠️  Could not add media server scripts to root package.json');
+  }
+}
+
+/**
+ * Update combined dev/start scripts to run all available apps
+ */
+function updateCombinedScripts(rootPkg) {
+  // Find all dev:* and start:* scripts (excluding the combined ones)
+  const devScripts = Object.keys(rootPkg.scripts || {})
+    .filter(key => key.startsWith('dev:') && key !== 'dev');
+  const startScripts = Object.keys(rootPkg.scripts || {})
+    .filter(key => key.startsWith('start:') && key !== 'start');
+  
+  // Create combined scripts that run all apps in parallel
+  if (devScripts.length > 0) {
+    rootPkg.scripts['dev'] = `turbo run dev`;
+  }
+  
+  if (startScripts.length > 0) {
+    rootPkg.scripts['start'] = `turbo run start`;
   }
 }

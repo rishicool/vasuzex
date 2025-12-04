@@ -452,8 +452,8 @@ async function generateApps(answers, targetDir) {
     }
   }
   
-  // Generate media server if template is api-media
-  if (answers.template === 'api-media') {
+  // Generate media server if template is api-media or fullstack
+  if (answers.template === 'api-media' || answers.template === 'fullstack') {
     console.log(chalk.cyan('🖼️  Generating Media Server...\n'));
     
     try {
