@@ -456,8 +456,8 @@ export function generatePostControllerTemplate() {
  */
 
 import { BaseController } from './BaseController.js';
-import { Post } from '../../../database/models/Post.js';
-import { Comment } from '../../../database/models/Comment.js';
+import { Post } from '../../../../../database/models/Post.js';
+import { Comment } from '../../../../../database/models/Comment.js';
 
 export class PostController extends BaseController {
   /**
@@ -622,8 +622,8 @@ export function generateCommentControllerTemplate() {
  */
 
 import { BaseController } from './BaseController.js';
-import { Comment } from '../../../database/models/Comment.js';
-import { Post } from '../../../database/models/Post.js';
+import { Comment } from '../../../../../database/models/Comment.js';
+import { Post } from '../../../../../database/models/Post.js';
 
 export class CommentController extends BaseController {
   /**
