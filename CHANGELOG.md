@@ -5,6 +5,15 @@ All notable changes to Vasuzex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.11] - 2025-12-04
+
+### Fixed
+- **CRITICAL**: Fixed `.js.js` double extension bug in database model imports
+  - Changed `vasuzex/Database/Relations.js` to `vasuzex/Database/Relations`
+  - Fixed in Post.js and Comment.js source models
+  - Resolves "Cannot find module Relations.js.js" error on fresh installations
+  - Root cause: package.json exports already adds `.js`, so imports shouldn't include it
+
 ## [1.0.10] - 2025-12-04
 
 ### Fixed

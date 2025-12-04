@@ -1,6 +1,6 @@
 {
   "name": "vasuzex",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Laravel-inspired framework for Node.js monorepos",
   "type": "module",
   "main": "./framework/index.js",

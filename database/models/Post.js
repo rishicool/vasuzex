@@ -1,5 +1,5 @@
 import Model from 'vasuzex/Database/Model';
-import { Relations } from 'vasuzex/Database/Relations.js';
+import { Relations } from 'vasuzex/Database/Relations';
 import { Comment } from './Comment.js';
 
 export class Post extends Model {
