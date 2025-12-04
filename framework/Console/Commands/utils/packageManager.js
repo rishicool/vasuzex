@@ -73,6 +73,9 @@ export async function createAppPackageJson(appName, appType, targetDir, framewor
       express: '^5.2.1',
       cors: '^2.8.5',
       helmet: '^8.1.0',
+      bcryptjs: '^2.4.3',
+      jsonwebtoken: '^9.0.2',
+      joi: '^17.13.3',
     };
     packageJson.devDependencies = {
       nodemon: '^3.1.11',

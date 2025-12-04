@@ -5,6 +5,13 @@ All notable changes to Vasuzex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.9] - 2025-12-04
+
+### Fixed
+- **CRITICAL**: Added missing API dependencies (`bcryptjs`, `jsonwebtoken`, `joi`) to package.json template
+  - API apps now include all required authentication and validation dependencies
+  - Fixes "Cannot find package 'bcryptjs'" error on fresh installations
+
 ## [1.0.8] - 2025-12-04
 
 ### Fixed
