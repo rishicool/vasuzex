@@ -1,5 +1,0 @@
-# Models go here
-
-Example: `User.js`, `Post.js`, `Comment.js`
-
-Generate with: `npx vasuzex make:model ModelName`

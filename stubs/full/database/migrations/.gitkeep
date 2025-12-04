@@ -1,5 +1,0 @@
-# Database migrations go here
-
-Generate with: `npx vasuzex make:migration create_table_name`
-
-Run with: `pnpm db:migrate`

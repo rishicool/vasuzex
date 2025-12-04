@@ -8,9 +8,12 @@
 
 ### Getting Started
 - [Installation](getting-started/installation.md)
+- [Quick Start Guide](getting-started/quickstart.md)
 - [Configuration](getting-started/configuration.md)
 - [Directory Structure](getting-started/structure.md)
-- [Quick Start Guide](getting-started/quickstart.md)
+
+### CLI Reference
+- [CLI Commands](cli/commands.md) - Complete reference for all Vasuzex commands
 
 ### Core Concepts
 - [Service Container](core/service-container.md)

@@ -11,28 +11,58 @@ import chalk from 'chalk';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const frameworkRoot = path.resolve(__dirname, '..');
 
 /**
- * Vasuzex Project Creator
- * Creates a new Vasuzex project from stubs
+ * ====================
+ * MODULAR FUNCTIONS
+ * ====================
  */
 
-async function createProject(projectName) {
-  console.log(chalk.cyan('\n🚀 Creating Vasuzex project...\n'));
-
-  // 1. Prompt for configuration
+/**
+ * Prompt user for project configuration
+ */
+async function promptUserInput(projectName) {
   const answers = await inquirer.prompt([
     {
       type: 'list',
       name: 'template',
       message: 'Choose starter template:',
       choices: [
-        { name: 'Minimal (Empty project - generate apps later)', value: 'default' },
-        { name: 'With Blog API', value: 'with-blog' },
-        { name: 'With Media Server', value: 'with-media' },
-        { name: 'Full Stack (Blog + Media)', value: 'full' }
+        { name: 'Minimal (Empty project - generate apps later)', value: 'minimal' },
+        { name: 'API Only (Backend)', value: 'api-only' },
+        { name: 'Web Only (Frontend)', value: 'web-only' },
+        { name: 'Full Stack (API + Web)', value: 'fullstack' },
+        { name: 'API + Media Server', value: 'api-media' }
       ],
-      default: 'default'
+      default: 'fullstack'
+    },
+    {
+      type: 'input',
+      name: 'appName',
+      message: 'Enter app name (e.g., blog, shop, admin):',
+      default: 'blog',
+      when: (answers) => answers.template !== 'minimal',
+      validate: (input) => {
+        if (!input || input.trim().length === 0) return 'App name is required';
+        if (!/^[a-z][a-z0-9-]*$/.test(input)) {
+          return 'App name must start with a letter and contain only lowercase letters, numbers, and hyphens';
+        }
+        return true;
+      }
+    },
+    {
+      type: 'list',
+      name: 'webFramework',
+      message: 'Choose web framework:',
+      choices: [
+        { name: 'React', value: 'react' },
+        { name: 'Vue.js', value: 'vue' },
+        { name: 'Svelte', value: 'svelte' },
+        { name: 'Vanilla JS (No framework)', value: 'vanilla' }
+      ],
+      when: (answers) => answers.template === 'web-only' || answers.template === 'fullstack',
+      default: 'react'
     },
     {
       type: 'list',
@@ -45,13 +75,13 @@ async function createProject(projectName) {
       type: 'confirm',
       name: 'configureDatabaseNow',
       message: 'Configure database connection now?',
-      default: false
+      default: true
     }
   ]);
 
-  let dbConfig = null;
+  // Database configuration
   if (answers.configureDatabaseNow && answers.database !== 'SQLite') {
-    dbConfig = await inquirer.prompt([
+    const dbConfig = await inquirer.prompt([
       {
         type: 'input',
         name: 'host',
@@ -83,8 +113,379 @@ async function createProject(projectName) {
         mask: '*'
       }
     ]);
+    
+    answers.dbConfig = dbConfig;
   }
 
+  return answers;
+}
+
+/**
+ * Create base project directory structure
+ */
+async function createProjectStructure(targetDir, spinner) {
+  spinner.text = 'Creating directory structure...';
+  
+  await fs.ensureDir(targetDir);
+  await fs.ensureDir(path.join(targetDir, 'database'));
+  await fs.ensureDir(path.join(targetDir, 'database/models'));
+  await fs.ensureDir(path.join(targetDir, 'database/migrations'));
+  await fs.ensureDir(path.join(targetDir, 'database/seeders'));
+  await fs.ensureDir(path.join(targetDir, 'apps'));
+}
+
+/**
+ * Copy config files from framework
+ */
+async function copyConfigFiles(targetDir, spinner) {
+  spinner.text = 'Copying configuration files...';
+  
+  const configSource = path.join(frameworkRoot, 'config');
+  const configTarget = path.join(targetDir, 'config');
+  await fs.copy(configSource, configTarget);
+}
+
+/**
+ * Copy database files from framework
+ */
+async function copyDatabaseFiles(targetDir, spinner) {
+  spinner.text = 'Setting up database structure...';
+  
+  const dbModelsSource = path.join(frameworkRoot, 'database/models');
+  const dbModelsTarget = path.join(targetDir, 'database/models');
+  if (await fs.pathExists(dbModelsSource)) {
+    await fs.copy(dbModelsSource, dbModelsTarget);
+  }
+  
+  const dbMigrationsSource = path.join(frameworkRoot, 'database/migrations');
+  const dbMigrationsTarget = path.join(targetDir, 'database/migrations');
+  if (await fs.pathExists(dbMigrationsSource)) {
+    await fs.copy(dbMigrationsSource, dbMigrationsTarget);
+  }
+}
+
+/**
+ * Create package.json
+ */
+async function createPackageJson(projectName, targetDir, spinner) {
+  spinner.text = 'Creating package.json...';
+  
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    type: 'module',
+    private: true,
+    scripts: {
+      dev: 'pnpm --parallel --stream dev',
+      'db:migrate': 'npx vasuzex migrate',
+      'db:migrate:status': 'npx vasuzex migrate:status',
+      'db:rollback': 'npx vasuzex migrate:rollback',
+      'db:seed': 'npx vasuzex db:seed',
+      'db:reset': 'npx vasuzex migrate:fresh --seed',
+      'make:model': 'npx vasuzex make:model',
+      'make:migration': 'npx vasuzex make:migration',
+      'make:seeder': 'npx vasuzex make:seeder',
+      'generate:app': 'npx vasuzex generate:app',
+      'generate:media-server': 'npx vasuzex generate:media-server'
+    },
+    keywords: ['vasuzex', 'nodejs', 'framework'],
+    dependencies: {},
+    devDependencies: {
+      nodemon: '^3.1.11'
+    }
+  };
+  
+  // Detect if running from local development
+  const isLocalDev = __dirname.includes('/work/vasuzex/') || __dirname.includes('\\work\\vasuzex\\');
+  
+  if (isLocalDev) {
+    packageJson.dependencies.vasuzex = `file:${frameworkRoot}`;
+    console.log(chalk.cyan(`\n🔧 Development mode: Using local vasuzex from ${frameworkRoot}\n`));
+  } else {
+    packageJson.dependencies.vasuzex = '^1.0.0';
+  }
+  
+  await fs.writeJSON(path.join(targetDir, 'package.json'), packageJson, { spaces: 2 });
+}
+
+/**
+ * Generate environment file
+ */
+async function generateEnvFile(projectName, answers, targetDir, spinner) {
+  spinner.text = 'Creating environment file...';
+  
+  let envContent = `# Application
+APP_NAME=${projectName}
+APP_ENV=development
+APP_PORT=3000
+APP_URL=http://localhost:3000
+
+# Database
+DB_CONNECTION=${answers.database.toLowerCase() === 'postgresql' ? 'postgresql' : answers.database.toLowerCase()}
+`;
+
+  const dbConfig = answers.dbConfig;
+  
+  if (answers.database === 'PostgreSQL') {
+    envContent += `
+POSTGRES_HOST=${dbConfig?.host || 'localhost'}
+POSTGRES_PORT=${dbConfig?.port || '5432'}
+POSTGRES_DB=${dbConfig?.database || projectName.replace(/-/g, '_')}
+POSTGRES_USER=${dbConfig?.username || 'postgres'}
+POSTGRES_PASSWORD=${dbConfig?.password || ''}
+`;
+  } else if (answers.database === 'MySQL') {
+    envContent += `
+DB_HOST=${dbConfig?.host || 'localhost'}
+DB_PORT=${dbConfig?.port || '3306'}
+DB_DATABASE=${dbConfig?.database || projectName.replace(/-/g, '_')}
+DB_USERNAME=${dbConfig?.username || 'root'}
+DB_PASSWORD=${dbConfig?.password || ''}
+`;
+  } else if (answers.database === 'SQLite') {
+    envContent += `
+DB_DATABASE=./database/${projectName}.sqlite
+`;
+  }
+
+  envContent += `
+# Cache
+CACHE_DRIVER=memory
+
+# Session
+SESSION_DRIVER=memory
+
+# Logging
+LOG_LEVEL=debug
+LOG_FILE=storage/logs/app.log
+`;
+
+  await fs.writeFile(path.join(targetDir, '.env'), envContent);
+  await fs.writeFile(path.join(targetDir, '.env.example'), envContent);
+}
+
+/**
+ * Create gitignore
+ */
+async function createGitignore(targetDir) {
+  const gitignoreContent = `node_modules/
+.env
+.DS_Store
+*.log
+coverage/
+dist/
+build/
+.vscode/
+.idea/
+*.sqlite
+storage/logs/*
+!storage/logs/.gitkeep
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+`;
+  await fs.writeFile(path.join(targetDir, '.gitignore'), gitignoreContent);
+}
+
+/**
+ * Create README
+ */
+async function createReadme(projectName, targetDir) {
+  const readmeContent = `# ${projectName}
+
+A Vasuzex application.
+
+## Getting Started
+
+### Install Dependencies
+
+\`\`\`bash
+pnpm install
+\`\`\`
+
+### Database Setup
+
+\`\`\`bash
+# Create database (if needed)
+createdb ${projectName.replace(/-/g, '_')}
+
+# Run migrations
+pnpm db:migrate
+
+# Seed database
+pnpm db:seed
+\`\`\`
+
+### Development
+
+\`\`\`bash
+pnpm dev
+\`\`\`
+
+## Available Commands
+
+\`\`\`bash
+pnpm generate:app <name>       # Generate new app
+pnpm make:model <name>         # Create model
+pnpm make:migration <name>     # Create migration
+pnpm db:migrate                # Run migrations
+pnpm db:seed                   # Seed database
+\`\`\`
+
+## Documentation
+
+See [Vasuzex Documentation](https://github.com/rishicool/vasuzex/tree/main/docs)
+`;
+  await fs.writeFile(path.join(targetDir, 'README.md'), readmeContent);
+}
+
+/**
+ * Install dependencies
+ */
+async function installDependencies(targetDir) {
+  console.log(chalk.cyan('\n📦 Installing dependencies...\n'));
+  
+  try {
+    execSync('pnpm install', {
+      cwd: targetDir,
+      stdio: 'inherit'
+    });
+    console.log(chalk.green('\n✅ Dependencies installed!\n'));
+    return true;
+  } catch (error) {
+    console.log(chalk.yellow('\n⚠️  Failed to install dependencies automatically'));
+    console.log(chalk.yellow('Please run "pnpm install" manually\n'));
+    return false;
+  }
+}
+
+/**
+ * Generate apps based on template
+ */
+async function generateApps(answers, targetDir) {
+  const appName = answers.appName || 'blog';
+  let appTypes = [];
+  
+  // Determine which apps to generate based on template
+  switch (answers.template) {
+    case 'api-only':
+      appTypes = ['api'];
+      break;
+    case 'web-only':
+      appTypes = ['web'];
+      break;
+    case 'fullstack':
+      appTypes = ['api', 'web'];
+      break;
+    case 'api-media':
+      appTypes = ['api'];
+      break;
+    default:
+      return; // minimal - no apps
+  }
+  
+  // Generate selected app types
+  for (const type of appTypes) {
+    console.log(chalk.cyan(`🚀 Generating ${appName} ${type.toUpperCase()}...\n`));
+    
+    try {
+      const webFramework = answers.webFramework || 'react';
+      const extraArgs = type === 'web' ? `--framework ${webFramework}` : '';
+      
+      execSync(`npx vasuzex generate:app ${appName} --type ${type} ${extraArgs}`, {
+        cwd: targetDir,
+        stdio: 'inherit',
+        env: { ...process.env, SKIP_INSTALL: 'true' }
+      });
+      console.log(chalk.green(`\n✅ ${appName} ${type} generated!\n`));
+    } catch (error) {
+      console.log(chalk.yellow(`\n⚠️  Could not generate ${appName} ${type} automatically`));
+      console.log(chalk.yellow(`You can run: pnpm generate:app ${appName} --type ${type}\n`));
+    }
+  }
+  
+  // Generate media server if template is api-media
+  if (answers.template === 'api-media') {
+    console.log(chalk.cyan('🖼️  Generating Media Server...\n'));
+    
+    try {
+      execSync('npx vasuzex generate:media-server', {
+        cwd: targetDir,
+        stdio: 'inherit',
+        env: { ...process.env, SKIP_INSTALL: 'true' }
+      });
+      console.log(chalk.green('\n✅ Media Server generated!\n'));
+    } catch (error) {
+      console.log(chalk.yellow('\n⚠️  Could not generate media server automatically'));
+      console.log(chalk.yellow('You can run: pnpm generate:media-server\n'));
+    }
+  }
+}
+
+/**
+ * Initialize git repository
+ */
+async function initializeGit(targetDir) {
+  const spinner = ora('Initializing git repository...').start();
+  
+  try {
+    execSync('git init', { cwd: targetDir, stdio: 'pipe' });
+    execSync('git add .', { cwd: targetDir, stdio: 'pipe' });
+    execSync('git commit -m "Initial commit from Vasuzex"', { cwd: targetDir, stdio: 'pipe' });
+    spinner.succeed('Git repository initialized!');
+  } catch (error) {
+    spinner.info('Skipped git initialization');
+  }
+}
+
+/**
+ * Display success message
+ */
+function displaySuccessMessage(projectName, answers) {
+  console.log(chalk.green('\n✅ Project created successfully!\n'));
+  console.log(chalk.cyan('Next steps:\n'));
+  console.log(chalk.white(`  cd ${projectName}`));
+  console.log(chalk.white(`  pnpm install  ${chalk.gray('(if not done automatically)')}`));
+  
+  if (answers.template === 'minimal') {
+    console.log(chalk.white(`  pnpm generate:app api  ${chalk.gray('(create your first app)')}`));
+  }
+  
+  if (answers.configureDatabaseNow) {
+    console.log(chalk.white(`  pnpm db:migrate`));
+  } else {
+    console.log(chalk.gray(`  # Edit .env with your database credentials`));
+    console.log(chalk.white(`  pnpm db:migrate`));
+  }
+  
+  if (answers.template !== 'minimal') {
+    console.log(chalk.white(`  cd apps/${answers.appName || 'blog'}/api`));
+    console.log(chalk.white(`  pnpm dev\n`));
+  } else {
+    console.log();
+  }
+  
+  console.log(chalk.gray('Available commands:'));
+  console.log(chalk.white('  pnpm generate:app <name>     - Generate new app'));
+  console.log(chalk.white('  pnpm make:model <name>       - Create model'));
+  console.log(chalk.white('  pnpm make:migration <name>   - Create migration'));
+  console.log(chalk.white('  pnpm db:migrate              - Run migrations\n'));
+  
+  console.log(chalk.cyan('📖 Documentation: https://github.com/rishicool/vasuzex/tree/main/docs'));
+  console.log(chalk.cyan('Happy coding! 🎉\n'));
+}
+
+/**
+ * ====================
+ * MAIN FUNCTION
+ * ====================
+ */
+async function createProject(projectName) {
+  console.log(chalk.cyan('\n🚀 Creating Vasuzex project...\n'));
+
+  // 1. Prompt for configuration
+  const answers = await promptUserInput(projectName);
+  
   const targetDir = path.join(process.cwd(), projectName);
 
   // 2. Check if directory exists
@@ -96,166 +497,45 @@ async function createProject(projectName) {
   const spinner = ora('Creating project structure...').start();
 
   try {
-    // 3. Determine stub directory
-    let stubDir = 'default';
-    if (answers.template === 'with-blog') {
-      stubDir = 'with-blog';
-    } else if (answers.template === 'with-media') {
-      stubDir = 'with-media';
-    } else if (answers.template === 'full') {
-      stubDir = 'full';
-    }
-
-    const stubPath = path.join(__dirname, '..', 'stubs', stubDir);
-
-    // 4. Check if stub exists, fallback to default
-    if (!(await fs.pathExists(stubPath))) {
-      spinner.warn(`Stub "${stubDir}" not found, using default`);
-      stubDir = 'default';
-    }
-
-    const finalStubPath = path.join(__dirname, '..', 'stubs', stubDir);
-
-    // 5. Copy stub to target directory
-    spinner.text = 'Copying project files...';
-    await fs.copy(finalStubPath, targetDir);
-
-    // 6. Process package.json.stub
-    spinner.text = 'Configuring package.json...';
-    const pkgStubPath = path.join(targetDir, 'package.json.stub');
+    // 3. Create project structure
+    await createProjectStructure(targetDir, spinner);
     
-    if (await fs.pathExists(pkgStubPath)) {
-      let pkgContent = await fs.readFile(pkgStubPath, 'utf-8');
-      pkgContent = pkgContent.replace(/PROJECT_NAME/g, projectName);
-      
-      // Detect if running from local development (not published to NPM)
-      const isLocalDev = __dirname.includes('/work/vasuzex/') || __dirname.includes('\\work\\vasuzex\\');
-      
-      if (isLocalDev) {
-        // For local development, use file: protocol to link to parent vasuzex
-        const vasuzexPath = path.resolve(__dirname, '..');
-        pkgContent = pkgContent.replace(/"vasuzex": "\^1\.0\.0"/g, `"vasuzex": "file:${vasuzexPath}"`);
-        console.log(chalk.cyan(`\n🔧 Development mode: Using local vasuzex from ${vasuzexPath}\n`));
-      }
-      
-      await fs.writeFile(path.join(targetDir, 'package.json'), pkgContent);
-      await fs.remove(pkgStubPath);
-    }
-
-    // 7. Setup .env file
-    spinner.text = 'Configuring environment...';
-    const envExamplePath = path.join(targetDir, '.env.example');
+    // 4. Copy config files
+    await copyConfigFiles(targetDir, spinner);
     
-    if (await fs.pathExists(envExamplePath)) {
-      let envContent = await fs.readFile(envExamplePath, 'utf-8');
-      
-      // Replace project name
-      envContent = envContent.replace(/MyApp/g, projectName);
-      envContent = envContent.replace(/myapp/g, projectName.replace(/-/g, '_'));
-      
-      // Configure database
-      if (answers.database === 'MySQL') {
-        envContent = envContent.replace(/DB_CONNECTION=postgresql/g, 'DB_CONNECTION=mysql');
-        envContent = envContent.replace(/POSTGRES_/g, 'DB_');
-        envContent = envContent.replace(/DB_PORT=5432/g, 'DB_PORT=3306');
-        envContent = envContent.replace(/DB_USER=/g, 'DB_USERNAME=');
-      } else if (answers.database === 'SQLite') {
-        envContent = envContent.replace(/DB_CONNECTION=postgresql/g, 'DB_CONNECTION=sqlite');
-      }
-      
-      // Apply custom database config
-      if (dbConfig) {
-        const prefix = answers.database === 'PostgreSQL' ? 'POSTGRES_' : 'DB_';
-        envContent = envContent.replace(new RegExp(`${prefix}HOST=.*`, 'g'), `${prefix}HOST=${dbConfig.host}`);
-        envContent = envContent.replace(new RegExp(`${prefix}PORT=.*`, 'g'), `${prefix}PORT=${dbConfig.port}`);
-        envContent = envContent.replace(new RegExp(`${prefix}DB=.*`, 'g'), `${prefix}DB=${dbConfig.database}`);
-        
-        if (answers.database === 'PostgreSQL') {
-          envContent = envContent.replace(/POSTGRES_USER=.*/, `POSTGRES_USER=${dbConfig.username}`);
-          envContent = envContent.replace(/POSTGRES_PASSWORD=.*/, `POSTGRES_PASSWORD=${dbConfig.password}`);
-        } else {
-          envContent = envContent.replace(/DB_USERNAME=.*/, `DB_USERNAME=${dbConfig.username}`);
-          envContent = envContent.replace(/DB_PASSWORD=.*/, `DB_PASSWORD=${dbConfig.password}`);
-        }
-      }
-      
-      await fs.writeFile(path.join(targetDir, '.env'), envContent);
-    }
-
-    // 8. Process README.md
-    spinner.text = 'Finalizing documentation...';
-    const readmePath = path.join(targetDir, 'README.md');
+    // 5. Copy database files
+    await copyDatabaseFiles(targetDir, spinner);
     
-    if (await fs.pathExists(readmePath)) {
-      let readmeContent = await fs.readFile(readmePath, 'utf-8');
-      readmeContent = readmeContent.replace(/PROJECT_NAME/g, projectName);
-      await fs.writeFile(readmePath, readmeContent);
-    }
-
+    // 6. Create package.json
+    await createPackageJson(projectName, targetDir, spinner);
+    
+    // 7. Generate .env file
+    await generateEnvFile(projectName, answers, targetDir, spinner);
+    
+    // 8. Create .gitignore
+    await createGitignore(targetDir);
+    
+    // 9. Create README
+    await createReadme(projectName, targetDir);
+    
     spinner.succeed('Project structure created!');
-
-    // 9. Install dependencies
-    spinner.start('Installing dependencies (this may take a minute)...');
     
-    try {
-      execSync('pnpm install', {
-        cwd: targetDir,
-        stdio: 'pipe'
-      });
-      spinner.succeed('Dependencies installed!');
-    } catch (error) {
-      spinner.warn('Failed to install dependencies automatically');
-      console.log(chalk.yellow('\n⚠️  Please run "pnpm install" manually\n'));
-    }
-
-    // 10. Initialize git
-    spinner.start('Initializing git repository...');
+    // 10. Install dependencies
+    await installDependencies(targetDir);
     
-    try {
-      execSync('git init', { cwd: targetDir, stdio: 'pipe' });
-      execSync('git add .', { cwd: targetDir, stdio: 'pipe' });
-      execSync('git commit -m "Initial commit from Vasuzex"', { cwd: targetDir, stdio: 'pipe' });
-      spinner.succeed('Git repository initialized!');
-    } catch (error) {
-      spinner.info('Skipped git initialization');
-    }
-
-    // 11. Success message
-    console.log(chalk.green('\n✅ Project created successfully!\n'));
-    console.log(chalk.cyan('Next steps:\n'));
-    console.log(chalk.white(`  cd ${projectName}`));
-    console.log(chalk.white(`  pnpm install  ${chalk.gray('(if not done automatically)')}`));
+    // 11. Generate apps
+    await generateApps(answers, targetDir);
     
-    if (answers.template === 'default') {
-      console.log(chalk.white(`  pnpm generate:app my-api  ${chalk.gray('(create your first app)')}`));
-    }
+    // 12. Initialize git
+    await initializeGit(targetDir);
     
-    if (answers.configureDatabaseNow) {
-      console.log(chalk.white(`  pnpm db:migrate`));
-    } else {
-      console.log(chalk.gray(`  # Edit .env with your database credentials`));
-      console.log(chalk.white(`  pnpm db:migrate`));
-    }
-    
-    if (answers.template !== 'default') {
-      console.log(chalk.white(`  cd apps/[app-name]`));
-      console.log(chalk.white(`  pnpm dev\n`));
-    } else {
-      console.log();
-    }
-    
-    console.log(chalk.gray('Available commands:'));
-    console.log(chalk.white('  pnpm generate:app <name>     - Generate new app'));
-    console.log(chalk.white('  pnpm make:model <name>       - Create model'));
-    console.log(chalk.white('  pnpm make:migration <name>   - Create migration'));
-    console.log(chalk.white('  pnpm db:migrate              - Run migrations\n'));
-    
-    console.log(chalk.cyan('📖 Documentation: https://github.com/rishicool/vasuzex/tree/main/docs'));
-    console.log(chalk.cyan('Happy coding! 🎉\n'));
+    // 13. Success message
+    displaySuccessMessage(projectName, answers);
 
   } catch (error) {
     spinner.fail('Failed to create project');
     console.error(chalk.red('\n' + error.message + '\n'));
+    console.error(error.stack);
     
     // Cleanup on failure
     if (await fs.pathExists(targetDir)) {
@@ -266,7 +546,11 @@ async function createProject(projectName) {
   }
 }
 
-// CLI Program
+/**
+ * ====================
+ * CLI PROGRAM
+ * ====================
+ */
 program
   .name('create-vasuzex')
   .description('Create a new Vasuzex project')

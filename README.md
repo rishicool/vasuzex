@@ -4,181 +4,371 @@
 > This framework is currently under active development and is **NOT recommended for production use**.  
 > Use at your own risk. APIs may change without notice. Expect bugs and breaking changes.
 
-A Laravel-inspired Node.js framework with Eloquent ORM, Facades, and zero-configuration setup.
+A Laravel-inspired Node.js framework with Eloquent ORM, Facades, Service Container, and zero-configuration setup.
 
-## ⚡ Quick Start
+[![npm version](https://img.shields.io/npm/v/vasuzex.svg)](https://www.npmjs.com/package/vasuzex)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+## 🚀 Quick Start
+
+### Create a New Project
 
 ```bash
+# No installation required - use npx
 npx create-vasuzex my-app
+
+# Follow the interactive setup
 cd my-app
 pnpm install
 pnpm db:migrate
 pnpm dev
 ```
 
-That's it! Your app is running on `http://localhost:3000` 🎉
+Your app is running at `http://localhost:3000`! 🎉
 
-## 🎯 Features
+---
 
-- **🚀 Zero Configuration** - Interactive CLI sets up everything
-- **📦 GuruORM Built-in** - Eloquent-style ORM included (no separate install)
-- **🎨 Laravel-Inspired** - Familiar structure for PHP developers
-- **🔧 Starter Apps** - Blog API & Media Server ready to use
-- **📁 Import Aliases** - Clean imports: `vasuzex`, `#models`, `#config`
-- **💾 Database Ready** - PostgreSQL, MySQL, SQLite support
-- **🔐 Authentication** - Guards, middleware, hashing built-in
-- **📧 Services** - Mail, SMS, Cache, Queue, Storage, Upload
-- **🖼️ Media Processing** - Image resize, optimization with Sharp
-- **✅ Validation** - Comprehensive validation including Indian validators
-- **📍 Location** - Geocoding, distance, area calculations
-- **🌍 GeoIP** - IP geolocation with MaxMind
+## 📦 Installation Options
 
-## 🏗️ Structure
+### Option 1: NPX (Recommended for Beginners)
 
-```
-vasuzex/
-├── apps/                    # Your applications
-│   ├── blog-api/
-│   └── todo-api/
-├── config/                  # Laravel-style configs
-│   ├── app.cjs
-│   ├── database.cjs
-│   ├── cache.cjs
-│   └── auth.cjs
-├── database/               # Database layer
-│   ├── models/            # Eloquent-style models
-│   ├── migrations/
-│   └── seeders/
-├── framework/             # Framework source
-│   ├── Foundation/
-│   ├── Database/
-│   ├── Support/Facades/  # Laravel facades
-│   └── Services/
+No installation needed:
+
+```bash
+npx create-vasuzex my-app
 ```
 
-## 🚀 Quick Start
+### Option 2: Global Installation (Recommended for Developers)
 
-### With Facades (Recommended)
+Install once, use everywhere:
+
+```bash
+npm install -g vasuzex
+
+# Now you can use commands globally
+create-vasuzex my-app
+cd my-app
+vasuzex generate:app my-api
+vasuzex make:model User
+vasuzex db:migrate
+```
+
+### Option 3: Local Dependency (For Existing Projects)
+
+Add to your existing project:
+
+```bash
+npm install vasuzex
+# or
+pnpm add vasuzex
+
+# Use via npx
+npx vasuzex generate:app my-api
+```
+
+**See [Installation Guide](./docs/getting-started/installation.md) for detailed instructions.**
+
+---
+
+## ✨ Features
+
+### 🎯 Core Features
+
+- **🚀 Zero Configuration** - Interactive CLI sets up everything automatically
+- **📦 Monorepo Ready** - Build multiple apps in one repository
+- **🎨 Laravel-Inspired** - Familiar architecture for PHP developers
+- **🔧 Starter Templates** - Blog API, Media Server, or start minimal
+- **📁 Clean Imports** - `import { Application, DB } from 'vasuzex'`
+- **💾 Multiple Databases** - PostgreSQL, MySQL, SQLite support
+
+### 🗄️ Database & ORM
+
+- **GuruORM Built-in** - Eloquent-style ORM included (no separate install)
+- **Relationships** - hasMany, belongsTo, hasOne, belongsToMany
+- **Query Builder** - Fluent, expressive database queries
+- **Migrations** - Version control for your database
+- **Seeders** - Populate database with test data
+- **Soft Deletes** - Trash and restore records
+- **Scopes** - Reusable query constraints
+- **Observers** - React to model events
+- **Mutators** - Transform attributes on get/set
+
+### 🔐 Authentication & Security
+
+- **Guards** - Session, token, JWT authentication
+- **Middleware** - Protect routes and verify permissions
+- **Password Hashing** - Bcrypt built-in
+- **Authorization** - Gate and Policy support
+- **CSRF Protection** - Cross-site request forgery prevention
+
+### 📧 Communication Services
+
+- **Mail** - Send emails (SMTP, SendGrid, Mailgun)
+- **SMS** - Send text messages (Twilio, AWS SNS)
+- **Notifications** - Multi-channel notifications
+- **Broadcasting** - Real-time events (Socket.io, Pusher)
+
+### 💾 Caching & Storage
+
+- **Cache** - Redis, Memory, File-based caching
+- **File Storage** - Local, S3, Digital Ocean Spaces
+- **File Upload** - Multipart form data handling
+- **Image Processing** - Resize, crop, optimize with Sharp
+
+### 🛠️ Utilities
+
+- **Validation** - Comprehensive validation rules
+- **Indian Validators** - PAN, Aadhaar, GSTIN, Phone validation
+- **Formatter** - Currency, dates, numbers (Indian formats)
+- **Location** - Geocoding, distance calculations, Indian states
+- **GeoIP** - IP geolocation with MaxMind
+- **Queue** - Background job processing
+- **Translation** - Multi-language support
+- **Logging** - Winston-based logging
+
+---
+
+## 📚 Documentation
+
+### Getting Started
+
+- **[Installation](./docs/getting-started/installation.md)** - Install Vasuzex and create your first project
+- **[Quick Start Guide](./docs/getting-started/quickstart.md)** - Build your first app in 10 minutes
+- **[Configuration](./docs/getting-started/configuration.md)** - Configure your application
+- **[Directory Structure](./docs/getting-started/structure.md)** - Understand the project layout
+
+### Core Concepts
+
+- **[Service Container](./docs/core/service-container.md)** - Dependency injection
+- **[Service Providers](./docs/core/service-providers.md)** - Bootstrap services
+- **[Facades](./docs/core/facades.md)** - Static-like interfaces
+- **[Import Aliases](./docs/IMPORT_ALIASES.md)** - Clean import paths
+
+### Database
+
+- **[Getting Started](./docs/database/getting-started.md)** - Database basics
+- **[Query Builder](./docs/database/query-builder.md)** - Build SQL queries
+- **[Eloquent ORM](./docs/database/eloquent.md)** - Work with models
+- **[Relationships](./docs/database/relationships.md)** - Model relationships
+- **[Migrations](./docs/database/migrations.md)** - Database versioning
+- **[Seeding](./docs/database/seeding.md)** - Populate data
+
+### HTTP & Routing
+
+- **[Routing](./docs/http/routing.md)** - Define routes
+- **[Controllers](./docs/http/controllers.md)** - Handle requests
+- **[Middleware](./docs/http/middleware.md)** - Filter requests
+- **[Validation](./framework/Services/Validation/README.md)** - Validate input
+
+### Services
+
+- **[Cache](./framework/Services/Cache/README.md)**
+- **[Mail](./framework/Services/Mail/README.md)**
+- **[SMS](./framework/Services/SMS/README.md)**
+- **[File Upload](./framework/Services/Upload/README.md)**
+- **[Image Processing](./framework/Services/Media/README.md)**
+- **[Formatter](./framework/Services/Formatter/README.md)**
+- **[Location](./framework/Services/Location/README.md)**
+- **[GeoIP](./framework/Services/GeoIP/README.md)**
+
+**[See all documentation →](./docs/README.md)**
+
+---
+
+## 💡 Usage Examples
+
+### Import the Framework
 
 ```javascript
+// Clean imports - everything from one place
 import { 
   Application,
   DB,
   Cache,
   Auth,
   Hash,
-  Log
+  Log,
+  Mail,
+  SMS
 } from 'vasuzex';
 
-import { Post, User } from '#models';
+// Import models
+import { User, Post, Comment } from '#models';
 
+// Start application
 const app = new Application(process.cwd());
 await app.boot();
-
-// Use facades
-const users = await DB.table('users').where('active', true).get();
-
-await Cache.put('key', 'value', 3600);
-
-const user = await User.find(1);
-await user.posts().getResults();
-
-Log.info('App started');
 ```
 
-### Import Aliases
-
-```javascript
-// Framework imports
-import { DB, Cache, Auth } from 'vasuzex';
-
-// Models
-import { Post, User, Comment } from '#models';
-
-// Database
-import { getDatabase } from '#database';
-
-// Config
-import config from '#config';
-```
-
-See [Import Aliases Guide](./docs/IMPORT_ALIASES.md) for complete documentation.
-
-## 📚 Usage Examples
-
-### Database (DB Facade)
+### Database Queries
 
 ```javascript
 import { DB } from 'vasuzex';
 
 // Query builder
-const users = await DB.table('users').where('active', true).get();
+const users = await DB.table('users')
+  .where('active', true)
+  .orderBy('created_at', 'desc')
+  .limit(10)
+  .get();
 
-// Insert
-await DB.table('posts').insert({ title: 'Hello', content: '...' });
+// Raw queries
+const result = await DB.raw('SELECT * FROM users WHERE id = ?', [1]);
 
-// Update
-await DB.table('users').where('id', 1).update({ name: 'John' });
+// Transactions
+await DB.transaction(async () => {
+  await DB.table('users').insert({ name: 'John' });
+  await DB.table('posts').insert({ title: 'Hello' });
+});
 ```
 
-### Models (Eloquent-style)
+### Eloquent Models
 
 ```javascript
-import { Post, User } from '#models';
+import { User, Post } from '#models';
 
-// Find
-const post = await Post.find(1);
+// Find by ID
+const user = await User.find(1);
 
 // Create
-const user = await User.create({
-  name: 'John Doe',
-  email: 'john@example.com',
-  password: 'secret' // Auto-hashed by mutator
+const post = await Post.create({
+  title: 'My First Post',
+  content: 'Hello World!',
+  user_id: user.id
 });
 
+// Update
+await user.update({ name: 'John Doe' });
+
+// Delete
+await post.delete();  // Soft delete
+await post.forceDelete();  // Permanent delete
+
 // Relationships
-const comments = await post.comments().getResults();
+const posts = await user.posts().getResults();
+const author = await post.user().getResults();
 
-// Scopes
+// Query scopes
 const published = await Post.where('status', 'published').get();
-
-// Soft deletes
-await user.delete(); // Soft delete
-await user.restore();
-await user.forceDelete(); // Permanent delete
 ```
 
-### Cache
+### Caching
 
 ```javascript
 import { Cache } from 'vasuzex';
 
-// Store
-await Cache.put('key', 'value', 3600); // 1 hour
+// Store for 1 hour (3600 seconds)
+await Cache.put('key', 'value', 3600);
 
 // Retrieve
 const value = await Cache.get('key', 'default');
 
-// Remember (cache if not exists)
+// Remember (get or set)
 const posts = await Cache.remember('posts', 3600, async () => {
   return await Post.all();
 });
+
+// Forget
+await Cache.forget('key');
+
+// Clear all
+await Cache.flush();
 ```
 
-### Auth
+### Authentication
 
 ```javascript
 import { Auth, Hash } from 'vasuzex';
 
 // Attempt login
-await Auth.attempt({ email: 'user@example.com', password: 'secret' });
+const success = await Auth.attempt({
+  email: 'user@example.com',
+  password: 'secret'
+});
 
-// Get user
-const user = Auth.user();
+if (success) {
+  const user = Auth.user();
+  console.log('Logged in:', user.name);
+}
 
 // Hash password
 const hashed = await Hash.make('password');
+
+// Verify password
 const valid = await Hash.check('password', hashed);
+```
+
+### File Upload
+
+```javascript
+import { Upload } from 'vasuzex';
+
+// In Express route
+app.post('/upload', Upload.single('file'), async (req, res) => {
+  const file = req.file;
+  
+  console.log('Uploaded:', file.filename);
+  console.log('Path:', file.path);
+  console.log('Size:', file.size);
+  
+  res.json({ success: true, file });
+});
+
+// Multiple files
+app.post('/upload-multiple', Upload.array('files', 10), async (req, res) => {
+  const files = req.files;
+  
+  res.json({ 
+    success: true, 
+    count: files.length 
+  });
+});
+```
+
+### Image Processing
+
+```javascript
+import { Media } from 'vasuzex';
+
+// Resize image
+await Media.resize('/path/to/image.jpg', {
+  width: 300,
+  height: 200,
+  fit: 'cover'
+});
+
+// Create thumbnail
+await Media.thumbnail('/path/to/image.jpg', 150);
+
+// Optimize
+await Media.optimize('/path/to/image.jpg', {
+  quality: 80
+});
+```
+
+### Validation
+
+```javascript
+import { Validator } from 'vasuzex';
+
+const rules = {
+  email: 'required|email',
+  password: 'required|min:8',
+  age: 'required|integer|min:18',
+  phone: 'required|indian_phone'
+};
+
+const validator = new Validator(req.body, rules);
+
+if (validator.fails()) {
+  return res.status(422).json({
+    errors: validator.errors()
+  });
+}
+
+const validated = validator.validated();
 ```
 
 ### Logging
@@ -189,27 +379,274 @@ import { Log } from 'vasuzex';
 Log.info('User logged in', { user_id: 123 });
 Log.error('Error occurred', { error: err.message });
 Log.warning('Cache miss');
+Log.debug('Debug info', { data });
 ```
 
-## 🔧 Available Facades
+---
 
-| Facade | Service | Usage |
-|--------|---------|-------|
-| `DB` | Database | Query builder, raw queries |
-| `Cache` | Cache | Store/retrieve cached data |
-| `Auth` | Authentication | Login, logout, user info |
-| `Hash` | Hashing | Password hashing |
-| `Log` | Logging | Application logs |
-| `Mail` | Email | Send emails |
-| `Queue` | Queue | Dispatch jobs |
-| `Storage` | File storage | File operations |
-| `Config` | Configuration | Get/set config values |
-| `Event` | Events | Dispatch/listen events |
-| `Gate` | Authorization | Check permissions |
-| `Session` | Session | Session management |
+## 🏗️ Project Structure
 
-See [Facades Documentation](./framework/Support/Facades/README.md) for complete API.
+```
+my-app/
+├── apps/                    # Your applications
+│   ├── blog-api/           # Blog API app
+│   │   ├── api/            # API code
+│   │   └── web/            # Web code
+│   └── media-server/       # Media processing
+├── config/                  # Laravel-style configs
+│   ├── app.cjs             # Application config
+│   ├── database.cjs        # Database connections
+│   ├── auth.cjs            # Authentication
+│   ├── cache.cjs           # Cache drivers
+│   ├── mail.cjs            # Mail services
+│   └── ...                 # More configs
+├── database/               # Database layer
+│   ├── models/            # Eloquent models
+│   │   ├── User.js
+│   │   └── Post.js
+│   ├── migrations/        # Database migrations
+│   └── seeders/           # Database seeders
+├── node_modules/          # Dependencies
+│   └── vasuzex/           # Framework core
+├── .env                   # Environment variables
+├── .env.example          # Environment template
+├── package.json          # Project manifest
+└── README.md             # Documentation
+```
+
+---
+
+## 🔧 Available Commands
+
+### Project Creation
+
+```bash
+# Create new project
+npx create-vasuzex my-app
+# or if installed globally
+create-vasuzex my-app
+```
+
+### Database Operations
+
+```bash
+# Run migrations
+pnpm db:migrate
+npx vasuzex migrate
+
+# Check migration status
+pnpm db:migrate:status
+npx vasuzex migrate:status
+
+# Rollback last migration
+npx vasuzex migrate:rollback
+
+# Seed database
+pnpm db:seed
+npx vasuzex db:seed
+
+# Fresh migration + seed
+pnpm db:reset
+npx vasuzex migrate:fresh --seed
+```
+
+### Code Generation
+
+```bash
+# Generate new app
+pnpm generate:app my-api
+npx vasuzex generate:app my-api --type api
+
+# Generate media server
+npx vasuzex generate:media-server --port 4003
+
+# Create model
+pnpm make:model Product
+npx vasuzex make:model Product --migration
+
+# Create migration
+pnpm make:migration create_products_table
+npx vasuzex make:migration create_products_table
+
+# Create seeder
+pnpm make:seeder ProductSeeder
+npx vasuzex make:seeder ProductSeeder
+```
+
+### Development
+
+```bash
+# Start all apps
+pnpm dev
+
+# Start specific app
+pnpm dev:blog-api
+pnpm dev:media-server
+
+# Run tests
+pnpm test
+
+# Lint code
+pnpm lint
+```
+
+---
+
+## 🎯 Use Cases
+
+### API Development
+
+Build RESTful APIs with built-in:
+- Authentication & JWT
+- Request validation
+- Database ORM
+- File uploads
+- Error handling
+
+```javascript
+// Example API endpoint
+import { Controller } from 'vasuzex';
+import { Product } from '#models';
+
+export class ProductController extends Controller {
+  async index(req, res) {
+    const products = await Product.all();
+    return res.json({ success: true, data: products });
+  }
+  
+  async store(req, res) {
+    const product = await Product.create(req.body);
+    return res.status(201).json({ success: true, data: product });
+  }
+}
+```
+
+### Microservices
+
+Build multiple services in one monorepo:
+- Shared models and configs
+- Independent deployment
+- Service communication
+- Centralized database
+
+### Media Processing
+
+Handle image uploads and processing:
+- Upload validation
+- Automatic resizing
+- Thumbnail generation
+- Multiple storage backends
+
+### Background Jobs
+
+Process tasks asynchronously:
+- Email sending
+- Report generation
+- Data processing
+- Scheduled tasks
+
+---
+
+## 🚦 System Requirements
+
+- **Node.js**: >= 18.0.0 (LTS recommended)
+- **npm**: >= 9.0.0
+- **pnpm**: >= 8.0.0 (recommended)
+- **Database**: PostgreSQL 12+, MySQL 5.7+, or SQLite 3+
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
 
 ## 📄 License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🔗 Links
+
+- **Documentation**: [https://github.com/rishicool/vasuzex/tree/main/docs](https://github.com/rishicool/vasuzex/tree/main/docs)
+- **Issues**: [https://github.com/rishicool/vasuzex/issues](https://github.com/rishicool/vasuzex/issues)
+- **NPM Package**: [https://www.npmjs.com/package/vasuzex](https://www.npmjs.com/package/vasuzex)
+- **GitHub**: [https://github.com/rishicool/vasuzex](https://github.com/rishicool/vasuzex)
+
+---
+
+## 🙏 Acknowledgments
+
+Inspired by:
+- **Laravel** - For the elegant architecture and developer experience
+- **Express** - For the HTTP server foundation
+- **Knex** - For query builder inspiration
+
+---
+
+## 📞 Support
+
+Having issues? Check our [documentation](./docs/README.md) or [open an issue](https://github.com/rishicool/vasuzex/issues).
+
+---
+
+**Made with ❤️ by the Vasuzex Team**
+
+---
+
+## Quick Reference
+
+### Import Framework
+
+```javascript
+import { Application, DB, Cache, Auth } from 'vasuzex';
+import { User, Post } from '#models';
+```
+
+### Create Project
+
+```bash
+npx create-vasuzex my-app
+cd my-app
+pnpm install && pnpm db:migrate && pnpm dev
+```
+
+### Common Commands
+
+```bash
+vasuzex generate:app my-api      # Generate new app
+vasuzex make:model User          # Create model
+vasuzex make:migration ...       # Create migration
+vasuzex db:migrate               # Run migrations
+vasuzex db:seed                  # Seed database
+```
+
+### CRUD Operations
+
+```javascript
+// Create
+const user = await User.create({ name: 'John', email: 'john@example.com' });
+
+// Read
+const users = await User.all();
+const user = await User.find(1);
+const active = await User.where('active', true).get();
+
+// Update
+await user.update({ name: 'Jane' });
+
+// Delete
+await user.delete();
+```
+
+---
+
+**Happy coding with Vasuzex! 🎉**

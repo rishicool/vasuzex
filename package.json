@@ -22,10 +22,12 @@
     "create-vasuzex": "./bin/create-vasuzex.js",
     "vasuzex": "./framework/Console/cli.js"
   },
+  "preferGlobal": true,
   "files": [
     "framework",
+    "config",
+    "database",
     "bin",
-    "stubs",
     "README.md",
     "LICENSE"
   ],
