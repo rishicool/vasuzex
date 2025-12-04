@@ -177,7 +177,8 @@ async function createPackageJson(projectName, targetDir, spinner) {
     private: true,
     packageManager: 'pnpm@10.0.0',
     scripts: {
-      dev: 'pnpm --parallel --stream dev',
+      dev: 'turbo run dev',
+      start: 'turbo run start',
       'db:migrate': 'npx vasuzex migrate',
       'db:migrate:status': 'npx vasuzex migrate:status',
       'db:rollback': 'npx vasuzex migrate:rollback',

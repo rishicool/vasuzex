@@ -8,9 +8,9 @@ import { pathExists, readJsonFile, writeJsonFile, getProjectRoot } from './fileO
 
 /**
  * Detect vasuzex dependency version
- * - For apps in user projects: use relative path to project root
+ * - For apps in user projects: use same version as root package.json
  * - For local dev of vasuzex itself: use file: path
- * - For published package: use ^1.0.3
+ * - For published package: use ^1.0.6
  */
 export async function detectVasuzexDependency(appDir = null) {
   // If we're in a user project (has vasuzex as dependency)
@@ -28,14 +28,12 @@ export async function detectVasuzexDependency(appDir = null) {
           // User project links to vasuzex via file: - apps should use same
           return vasuzexValue;
         }
-        if (vasuzexValue === 'workspace:*') {
-          // Root explicitly uses workspace protocol
-          return 'workspace:*';
-        }
         if (vasuzexValue.match(/^\^?\d+\.\d+\.\d+/)) {
           // Published version - return exact same value
           return vasuzexValue;
         }
+        // Don't return workspace:* - it breaks fresh installs
+        // Fall through to default
       }
     } catch (error) {
       // Ignore errors, fall through to default
@@ -43,7 +41,7 @@ export async function detectVasuzexDependency(appDir = null) {
   }
   
   // Default: use published version
-  return '^1.0.3';
+  return '^1.0.6';
 }
 
 /**

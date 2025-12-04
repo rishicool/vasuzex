@@ -5,6 +5,15 @@ All notable changes to Vasuzex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2025-12-04
+
+### Fixed
+- Fixed root package.json scripts to use `turbo run dev` instead of `pnpm --parallel --stream dev`
+- Added `start` script to root package.json
+- Fixed detectVasuzexDependency to never return `workspace:*` for fresh installs
+- Apps now correctly use the same vasuzex version as root package.json
+- Removed workspace:* dependency that was breaking fresh project installs
+
 ## [1.0.6] - 2025-12-04
 
 ### Fixed
