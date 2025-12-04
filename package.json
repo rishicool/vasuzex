@@ -1,6 +1,6 @@
 {
   "name": "vasuzex",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Laravel-inspired framework for Node.js monorepos",
   "type": "module",
   "main": "./framework/index.js",
@@ -44,7 +44,9 @@
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
+    "dev:testapp-web": "turbo run dev --filter=testapp-web",
+    "start:testapp-web": "turbo run start --filter=testapp-web"
   },
   "keywords": [
     "framework",
@@ -99,5 +101,6 @@
   "homepage": "https://github.com/rishicool/vasuzex#readme",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "packageManager": "pnpm@10.0.0"
 }

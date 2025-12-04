@@ -1,8 +1,8 @@
 # Vasuzex Framework
 
-> **⚠️ WARNING: DEVELOPMENT VERSION**  
-> This framework is currently under active development and is **NOT recommended for production use**.  
-> Use at your own risk. APIs may change without notice. Expect bugs and breaking changes.
+> **✅ PRODUCTION READY - v1.0.4**  
+> Fully tested framework with comprehensive API/Web scaffolding, Eloquent ORM, Facades, and zero-configuration setup.  
+> Perfect for building modern monorepo applications with Node.js.
 
 A Laravel-inspired Node.js framework with Eloquent ORM, Facades, Service Container, and zero-configuration setup.
 
@@ -16,14 +16,26 @@ A Laravel-inspired Node.js framework with Eloquent ORM, Facades, Service Contain
 ### Create a New Project
 
 ```bash
-# No installation required - use npx
+# Using npx (no installation required)
 npx create-vasuzex my-app
+
+# Using npm
+npm create vasuzex my-app
+
+# Using pnpm
+pnpm create vasuzex my-app
 
 # Follow the interactive setup
 cd my-app
-pnpm install
-pnpm db:migrate
-pnpm dev
+
+# Install dependencies (if not auto-installed)
+npm install  # or: pnpm install
+
+# Run migrations
+npm run db:migrate  # or: pnpm db:migrate
+
+# Start development
+npm run dev  # or: pnpm dev
 ```
 
 Your app is running at `http://localhost:3000`! 🎉
@@ -32,20 +44,37 @@ Your app is running at `http://localhost:3000`! 🎉
 
 ## 📦 Installation Options
 
-### Option 1: NPX (Recommended for Beginners)
+### Option 1: NPX/NPM Create (Recommended for Quick Start)
 
-No installation needed:
+No installation needed - works with npm, pnpm, or yarn:
 
 ```bash
+# NPX (npm 5.2+)
 npx create-vasuzex my-app
+
+# NPM
+npm create vasuzex my-app
+
+# PNPM
+pnpm create vasuzex my-app
+
+# Yarn
+yarn create vasuzex my-app
 ```
 
-### Option 2: Global Installation (Recommended for Developers)
+### Option 2: Global Installation (Recommended for Active Development)
 
 Install once, use everywhere:
 
 ```bash
+# Using npm
 npm install -g vasuzex
+
+# Using pnpm
+pnpm add -g vasuzex
+
+# Using yarn
+yarn global add vasuzex
 
 # Now you can use commands globally
 create-vasuzex my-app
@@ -60,15 +89,20 @@ vasuzex db:migrate
 Add to your existing project:
 
 ```bash
+# Using npm
 npm install vasuzex
-# or
+
+# Using pnpm
 pnpm add vasuzex
 
-# Use via npx
+# Using yarn
+yarn add vasuzex
+
+# Use via npx or direct command
 npx vasuzex generate:app my-api
 ```
 
-**See [Installation Guide](./docs/getting-started/installation.md) for detailed instructions.**
+**All three options work identically - choose what fits your workflow!**
 
 ---
 
@@ -79,7 +113,8 @@ npx vasuzex generate:app my-api
 - **🚀 Zero Configuration** - Interactive CLI sets up everything automatically
 - **📦 Monorepo Ready** - Build multiple apps in one repository
 - **🎨 Laravel-Inspired** - Familiar architecture for PHP developers
-- **🔧 Starter Templates** - Blog API, Media Server, or start minimal
+- **🔧 Starter Templates** - API, Web (React/Vue/Svelte), Media Server
+- **⚡ Web Scaffolding** - Full React, Vue, Svelte apps with Vite
 - **📁 Clean Imports** - `import { Application, DB } from 'vasuzex'`
 - **💾 Multiple Databases** - PostgreSQL, MySQL, SQLite support
 
@@ -430,43 +465,62 @@ create-vasuzex my-app
 ### Database Operations
 
 ```bash
-# Run migrations
-pnpm db:migrate
+# Using npm/npx
+npm run db:migrate
 npx vasuzex migrate
 
+# Using pnpm
+pnpm db:migrate
+pnpm vasuzex migrate
+
 # Check migration status
+npm run db:migrate:status
 pnpm db:migrate:status
-npx vasuzex migrate:status
 
 # Rollback last migration
 npx vasuzex migrate:rollback
 
 # Seed database
+npm run db:seed
 pnpm db:seed
-npx vasuzex db:seed
 
 # Fresh migration + seed
+npm run db:reset
 pnpm db:reset
-npx vasuzex migrate:fresh --seed
 ```
 
 ### Code Generation
 
 ```bash
-# Generate new app
-pnpm generate:app my-api
-npx vasuzex generate:app my-api --type api
+# Generate API application (works with npm, pnpm, yarn)
+npx vasuzex generate:app blog --type api
+pnpm vasuzex generate:app blog --type api
+npm run generate:app blog --type api  # if you added to scripts
+
+# Generate Web application (with framework selection)
+npx vasuzex generate:app blog --type web
+pnpm vasuzex generate:app blog --type web
+# Interactive prompt will ask: React, Vue, Svelte, or Plain HTML
+
+# Or specify framework directly
+npx vasuzex generate:app blog --type web --framework react
+pnpm vasuzex generate:app shop --type web --framework vue
+
+# Generate both API + Web
+npx vasuzex generate:app blog
+pnpm vasuzex generate:app blog
 
 # Generate media server
-npx vasuzex generate:media-server --port 4003
+npx vasuzex generate:media-server
+pnpm vasuzex generate:media-server --port 4003
 
 # Create model
-pnpm make:model Product
-npx vasuzex make:model Product --migration
+npx vasuzex make:model Product
+pnpm vasuzex make:model Product --migration
 
 # Create migration
-pnpm make:migration create_products_table
 npx vasuzex make:migration create_products_table
+pnpm vasuzex make:migration create_products_table
 
 # Create seeder
 pnpm make:seeder ProductSeeder

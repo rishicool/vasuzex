@@ -43,7 +43,25 @@ program
   .command('generate:app <name>')
   .description('Generate new application (api, web, or both)')
   .option('-t, --type <type>', 'App type (api|web). Omit to generate both')
-  .action((name, options) => {
+  .option('-f, --framework <framework>', 'Web framework (react|vue|svelte|plain)')
+  .action(async (name, options) => {
+    // If web type but no framework specified, prompt user
+    if (options.type === 'web' && !options.framework) {
+      const inquirer = (await import('inquirer')).default;
+      const answers = await inquirer.prompt([{
+        type: 'list',
+        name: 'framework',
+        message: 'Select web framework:',
+        choices: [
+          { name: 'React', value: 'react' },
+          { name: 'Vue', value: 'vue' },
+          { name: 'Svelte', value: 'svelte' },
+          { name: 'Plain HTML/JS', value: 'plain' },
+        ],
+      }]);
+      options.framework = answers.framework;
+    }
+    
     generateApp(name, options);
   });
 

@@ -175,6 +175,7 @@ async function createPackageJson(projectName, targetDir, spinner) {
     version: '1.0.0',
     type: 'module',
     private: true,
+    packageManager: 'pnpm@10.0.0',
     scripts: {
       dev: 'pnpm --parallel --stream dev',
       'db:migrate': 'npx vasuzex migrate',
@@ -191,7 +192,8 @@ async function createPackageJson(projectName, targetDir, spinner) {
     keywords: ['vasuzex', 'nodejs', 'framework'],
     dependencies: {},
     devDependencies: {
-      nodemon: '^3.1.11'
+      nodemon: '^3.1.11',
+      turbo: '^2.6.1'
     }
   };
   
@@ -206,6 +208,49 @@ async function createPackageJson(projectName, targetDir, spinner) {
   }
   
   await fs.writeJSON(path.join(targetDir, 'package.json'), packageJson, { spaces: 2 });
+}
+
+/**
+ * Create pnpm-workspace.yaml
+ */
+async function createPnpmWorkspace(targetDir) {
+  const workspaceContent = `packages:
+  - 'apps/*'
+  - 'apps/*/api'
+  - 'apps/*/web'
+`;
+  
+  await fs.writeFile(path.join(targetDir, 'pnpm-workspace.yaml'), workspaceContent, 'utf8');
+}
+
+/**
+ * Create turbo.json configuration
+ */
+async function createTurboConfig(targetDir) {
+  const turboConfig = {
+    "$schema": "https://turbo.build/schema.json",
+    "globalDependencies": ["**/.env"],
+    "globalEnv": ["NODE_ENV", "CI", "APP_ENV"],
+    "tasks": {
+      "dev": {
+        "cache": false,
+        "persistent": true,
+        "env": ["APP_ENV", "NODE_ENV", "DATABASE_URL"]
+      },
+      "build": {
+        "dependsOn": ["^build"],
+        "outputs": ["dist/**", "build/**"],
+        "env": ["NODE_ENV"]
+      },
+      "start": {
+        "cache": false,
+        "persistent": true,
+        "dependsOn": ["build"]
+      }
+    }
+  };
+  
+  await fs.writeJSON(path.join(targetDir, 'turbo.json'), turboConfig, { spaces: 2 });
 }
 
 /**
@@ -392,7 +437,10 @@ async function generateApps(answers, targetDir) {
       const webFramework = answers.webFramework || 'react';
       const extraArgs = type === 'web' ? `--framework ${webFramework}` : '';
       
-      execSync(`npx vasuzex generate:app ${appName} --type ${type} ${extraArgs}`, {
+      // Use node_modules/.bin/vasuzex for cross-package-manager compatibility
+      const vasuzexCmd = path.join(targetDir, 'node_modules', '.bin', 'vasuzex');
+      
+      execSync(`"${vasuzexCmd}" generate:app ${appName} --type ${type} ${extraArgs}`, {
         cwd: targetDir,
         stdio: 'inherit',
         env: { ...process.env, SKIP_INSTALL: 'true' }
@@ -400,7 +448,7 @@ async function generateApps(answers, targetDir) {
       console.log(chalk.green(`\n✅ ${appName} ${type} generated!\n`));
     } catch (error) {
       console.log(chalk.yellow(`\n⚠️  Could not generate ${appName} ${type} automatically`));
-      console.log(chalk.yellow(`You can run: pnpm generate:app ${appName} --type ${type}\n`));
+      console.log(chalk.yellow(`You can run: vasuzex generate:app ${appName} --type ${type}\n`));
     }
   }
   
@@ -409,15 +457,18 @@ async function generateApps(answers, targetDir) {
     console.log(chalk.cyan('🖼️  Generating Media Server...\n'));
     
     try {
-      execSync('npx vasuzex generate:media-server', {
+      // Use node_modules/.bin/vasuzex for cross-package-manager compatibility
+      const vasuzexCmd = path.join(targetDir, 'node_modules', '.bin', 'vasuzex');
+      
+      execSync(`"${vasuzexCmd}" generate:media-server`, {
         cwd: targetDir,
         stdio: 'inherit',
         env: { ...process.env, SKIP_INSTALL: 'true' }
       });
-      console.log(chalk.green('\n✅ Media Server generated!\n'));
+      console.log(chalk.green('\n✅ Media server generated!\n'));
     } catch (error) {
       console.log(chalk.yellow('\n⚠️  Could not generate media server automatically'));
-      console.log(chalk.yellow('You can run: pnpm generate:media-server\n'));
+      console.log(chalk.yellow('You can run: vasuzex generate:media-server\n'));
     }
   }
 }
@@ -509,27 +560,33 @@ async function createProject(projectName) {
     // 6. Create package.json
     await createPackageJson(projectName, targetDir, spinner);
     
-    // 7. Generate .env file
+    // 7. Create pnpm-workspace.yaml
+    await createPnpmWorkspace(targetDir);
+    
+    // 8. Create turbo.json
+    await createTurboConfig(targetDir);
+    
+    // 9. Generate .env file
     await generateEnvFile(projectName, answers, targetDir, spinner);
     
-    // 8. Create .gitignore
+    // 10. Create .gitignore
     await createGitignore(targetDir);
     
-    // 9. Create README
+    // 11. Create README
     await createReadme(projectName, targetDir);
     
     spinner.succeed('Project structure created!');
     
-    // 10. Install dependencies
+    // 12. Install dependencies
     await installDependencies(targetDir);
     
-    // 11. Generate apps
+    // 13. Generate apps
     await generateApps(answers, targetDir);
     
-    // 12. Initialize git
+    // 14. Initialize git
     await initializeGit(targetDir);
     
-    // 13. Success message
+    // 15. Success message
     displaySuccessMessage(projectName, answers);
 
   } catch (error) {

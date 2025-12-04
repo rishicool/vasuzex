@@ -8,39 +8,48 @@ import { pathExists, readJsonFile, writeJsonFile, getProjectRoot } from './fileO
 
 /**
  * Detect vasuzex dependency version
- * - workspace:* for development
- * - file:... for local linking
- * - ^1.0.0 for published package
+ * - For apps in user projects: use relative path to project root
+ * - For local dev of vasuzex itself: use file: path
+ * - For published package: use ^1.0.3
  */
-export async function detectVasuzexDependency() {
-  const rootPkgPath = join(getProjectRoot(), 'package.json');
+export async function detectVasuzexDependency(appDir = null) {
+  // If we're in a user project (has vasuzex as dependency)
+  const projectRoot = getProjectRoot();
+  const rootPkgPath = join(projectRoot, 'package.json');
   
-  if (!pathExists(rootPkgPath)) {
-    return '^1.0.0';
+  if (pathExists(rootPkgPath)) {
+    try {
+      const rootPkg = await readJsonFile(rootPkgPath);
+      const vasuzexValue = rootPkg.dependencies?.vasuzex;
+      
+      // If root already has vasuzex, apps should use same reference
+      if (vasuzexValue) {
+        if (vasuzexValue.startsWith('file:')) {
+          // User project links to vasuzex via file: - apps should use same
+          return vasuzexValue;
+        }
+        if (vasuzexValue === 'workspace:*') {
+          // Root explicitly uses workspace protocol
+          return 'workspace:*';
+        }
+        if (vasuzexValue.match(/^\^?\d+\.\d+\.\d+/)) {
+          // Published version - return exact same value
+          return vasuzexValue;
+        }
+      }
+    } catch (error) {
+      // Ignore errors, fall through to default
+    }
   }
   
-  try {
-    const rootPkg = await readJsonFile(rootPkgPath);
-    const vasuzexValue = rootPkg.dependencies?.vasuzex || '';
-    
-    if (vasuzexValue.startsWith('file:')) {
-      return vasuzexValue;
-    }
-    
-    if (pathExists(join(getProjectRoot(), 'pnpm-workspace.yaml'))) {
-      return 'workspace:*';
-    }
-    
-    return '^1.0.0';
-  } catch (error) {
-    return '^1.0.0';
-  }
+  // Default: use published version
+  return '^1.0.3';
 }
 
 /**
  * Create package.json for app
  */
-export async function createAppPackageJson(appName, appType, targetDir) {
+export async function createAppPackageJson(appName, appType, targetDir, framework = null) {
   const vasuzexDep = await detectVasuzexDependency();
   
   const packageJson = {
@@ -49,21 +58,60 @@ export async function createAppPackageJson(appName, appType, targetDir) {
     description: `${appName} ${appType} application`,
     type: 'module',
     private: true,
-    scripts: {
+    scripts: {},
+    dependencies: {},
+    devDependencies: {},
+  };
+  
+  // API-specific configuration
+  if (appType === 'api') {
+    packageJson.scripts = {
       dev: 'nodemon src/index.js',
       start: 'node src/index.js',
-    },
-    dependencies: {
+    };
+    packageJson.dependencies = {
       vasuzex: vasuzexDep,
       guruorm: '^2.0.0',
       express: '^5.2.1',
       cors: '^2.8.5',
       helmet: '^8.1.0',
-    },
-    devDependencies: {
+    };
+    packageJson.devDependencies = {
       nodemon: '^3.1.11',
-    },
-  };
+    };
+  }
+  
+  // Web-specific configuration
+  if (appType === 'web') {
+    packageJson.scripts = {
+      dev: 'vite',
+      build: 'vite build',
+      preview: 'vite preview',
+    };
+    
+    packageJson.devDependencies = {
+      vite: '^5.0.0',
+    };
+    
+    // Framework-specific dependencies
+    if (framework === 'react') {
+      packageJson.dependencies = {
+        react: '^18.2.0',
+        'react-dom': '^18.2.0',
+      };
+      packageJson.devDependencies['@vitejs/plugin-react'] = '^4.2.1';
+    } else if (framework === 'vue') {
+      packageJson.dependencies = {
+        vue: '^3.4.0',
+      };
+      packageJson.devDependencies['@vitejs/plugin-vue'] = '^5.0.0';
+    } else if (framework === 'svelte') {
+      packageJson.dependencies = {
+        svelte: '^4.2.0',
+      };
+      packageJson.devDependencies['@sveltejs/vite-plugin-svelte'] = '^3.0.0';
+    }
+  }
   
   await writeJsonFile(join(targetDir, 'package.json'), packageJson);
 }

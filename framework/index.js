@@ -29,6 +29,7 @@ export {
   Hash,
   Log,
   Mail,
+  Media,
   Notification,
   Queue,
   RateLimiter,

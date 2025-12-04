@@ -47,18 +47,19 @@ import {
  */
 export async function generateApp(name, options) {
   const type = options.type;
+  const framework = options.framework;
   
   // Validate input
   validateAppType(type);
   
   // Generate app
-  await generateSingleApp(name, type);
+  await generateSingleApp(name, type, framework);
 }
 
 /**
  * Generate single app (api or web)
  */
-async function generateSingleApp(name, type) {
+async function generateSingleApp(name, type, framework) {
   const targetDir = getAppPath(name, type);
 
   console.log(`🚀 Generating ${name.toUpperCase()} ${type.toUpperCase()} Application\n`);
@@ -71,11 +72,11 @@ async function generateSingleApp(name, type) {
     if (type === 'api') {
       await generateAPIApp(name, targetDir);
     } else if (type === 'web') {
-      await generateWebApp(name, targetDir);
+      await generateWebApp(name, targetDir, framework);
     }
 
     // Generate common files
-    await generateCommonFiles(name, type, targetDir);
+    await generateCommonFiles(name, type, targetDir, framework);
 
     // Add scripts to root package.json
     await addRootScripts(name, type);
@@ -84,7 +85,7 @@ async function generateSingleApp(name, type) {
     if (type === 'api') {
       displayAPIStructure(name, type);
     } else {
-      displayWebStructure(name, type);
+      displayWebStructure(name, type, framework);
     }
 
     // Install dependencies
@@ -94,7 +95,7 @@ async function generateSingleApp(name, type) {
     if (type === 'api') {
       displayAPINextSteps(name, type);
     } else {
-      displayWebNextSteps(name, type);
+      displayWebNextSteps(name, type, framework);
     }
 
   } catch (error) {
@@ -126,28 +127,30 @@ async function generateAPIApp(name, targetDir) {
 /**
  * Generate Web application
  */
-async function generateWebApp(name, targetDir) {
+async function generateWebApp(name, targetDir, framework) {
   // Create complete web structure
-  await generateCompleteWebStructure(targetDir, name);
+  await generateCompleteWebStructure(targetDir, name, framework);
 }
 
 /**
  * Generate common files (package.json, .env, README, .gitignore)
  */
-async function generateCommonFiles(name, type, targetDir) {
+async function generateCommonFiles(name, type, targetDir, framework) {
   // package.json
-  await createAppPackageJson(name, type, targetDir);
+  await createAppPackageJson(name, type, targetDir, framework);
   
   // .env and .env.example
   const envContent = generateEnvTemplate(name, type);
   await writeFileContent(join(targetDir, '.env.example'), envContent);
   await writeFileContent(join(targetDir, '.env'), envContent);
   
-  // README.md
-  await writeFileContent(
-    join(targetDir, 'README.md'),
-    generateReadmeTemplate(name, type)
-  );
+  // README.md (skip for web with framework as it's generated separately)
+  if (type !== 'web' || !framework) {
+    await writeFileContent(
+      join(targetDir, 'README.md'),
+      generateReadmeTemplate(name, type)
+    );
+  }
   
   // .gitignore
   await writeFileContent(

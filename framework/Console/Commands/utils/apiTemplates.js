@@ -171,7 +171,8 @@ export function generateAuthServiceTemplate() {
 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/User.js';
+// Import from centralized models (5 levels up: services→src→api→{name}→apps→root)
+import { User } from '../../../../../database/models/User.js';
 
 export class AuthService {
   /**
@@ -272,8 +273,8 @@ export function generateAuthMiddlewareTemplate() {
  */
 
 import { AuthService } from '../services/AuthService.js';
-// Import from centralized models
-import { User } from '../../../database/models/User.js';
+// Import from centralized models (5 levels up: middleware→src→api→{name}→apps→root)
+import { User } from '../../../../../database/models/User.js';
 
 export async function authMiddleware(req, res, next) {
   try {
@@ -417,19 +418,6 @@ export function generateRoutesIndexTemplate() {
 import { authRoutes } from './auth.routes.js';
 
 /**
- * Get all routes with their base paths
- * @returns {Array} Array of route definitions
- */
-export function getAllRoutes() {
-  return [
-    { path: '/api/auth', router: authRoutes },
-    // Add more routes here as your app grows
-    // { path: '/api/users', router: userRoutes },
-    // { path: '/api/posts', router: postRoutes },
-  ];
-}
-
-/**
  * Health check route (can be used separately)
  */
 export const healthRoutes = (req, res) => {
@@ -440,5 +428,19 @@ export const healthRoutes = (req, res) => {
     timestamp: new Date().toISOString(),
   });
 };
+
+/**
+ * Get all routes with their base paths
+ * @returns {Array} Array of route definitions
+ */
+export function getAllRoutes() {
+  return [
+    { path: '/health', handler: healthRoutes },
+    { path: '/api/auth', router: authRoutes },
+    // Add more routes here as your app grows
+    // { path: '/api/users', router: userRoutes },
+    // { path: '/api/posts', router: postRoutes },
+  ];
+}
 `;
 }

@@ -29,15 +29,29 @@ export function displayAPIStructure(appName, appType) {
 /**
  * Display web structure info
  */
-export function displayWebStructure(appName, appType) {
+export function displayWebStructure(appName, appType, framework) {
   console.log('\n✅ App generated successfully!\n');
   console.log('📁 Structure:');
   console.log(`   apps/${appName}/${appType}/`);
-  console.log('   ├── src/              (Empty - add your code)');
-  console.log('   ├── public/           (index.html placeholder)');
+  
+  if (framework && framework !== 'plain') {
+    const ext = framework === 'react' ? 'jsx' : framework === 'vue' ? 'vue' : 'svelte';
+    console.log(`   ├── src/              (${framework.charAt(0).toUpperCase() + framework.slice(1)} components)`);
+    console.log(`   │   ├── App.${ext}`);
+    console.log(`   │   └── main.${framework === 'react' ? 'jsx' : 'js'}`);
+  } else {
+    console.log('   ├── src/              (Empty - add your code)');
+  }
+  
+  console.log('   ├── public/           (index.html)');
+  console.log('   ├── vite.config.js    (Vite configuration)');
   console.log('   ├── package.json');
   console.log('   ├── .env');
   console.log('   └── README.md\n');
+  
+  if (framework) {
+    console.log(`📦 Framework: ${framework.charAt(0).toUpperCase() + framework.slice(1)}`);
+  }
 }
 
 /**
@@ -46,11 +60,13 @@ export function displayWebStructure(appName, appType) {
 export function displayAPINextSteps(appName, appType) {
   console.log('📝 Next steps:');
   console.log(`  1. cd apps/${appName}/${appType}`);
-  console.log('  2. Update .env if needed (JWT_SECRET, APP_PORT)');
-  console.log('  3. Run migrations: pnpm db:migrate (from project root)');
-  console.log(`  4. Start dev server: pnpm dev:${appName}-${appType} (from project root)\n`);
+  console.log('  2. ⚠️  IMPORTANT: Update .env and set unique APP_PORT (each app needs different port)');
+  console.log('  3. Update JWT_SECRET in .env');
+  console.log('  4. Run migrations: pnpm db:migrate (from project root)');
+  console.log(`  5. Start dev server: pnpm dev:${appName}-${appType} (from project root)\n`);
   
   console.log('🔐 Authentication endpoints:');
+  console.log('   GET  /health');
   console.log('   POST /api/auth/register');
   console.log('   POST /api/auth/login');
   console.log('   GET  /api/auth/me (protected)');
@@ -60,11 +76,22 @@ export function displayAPINextSteps(appName, appType) {
 /**
  * Display next steps for web
  */
-export function displayWebNextSteps(appName, appType) {
+export function displayWebNextSteps(appName, appType, framework) {
   console.log('📝 Next steps:');
   console.log(`  1. cd apps/${appName}/${appType}`);
-  console.log('  2. Install your frontend framework (React/Vue/Svelte)');
+  
+  if (!framework || framework === 'plain') {
+    console.log('  2. Install your frontend framework (React/Vue/Svelte)');
+  } else {
+    console.log(`  2. Open browser at http://localhost:3001`);
+  }
+  
   console.log(`  3. Start dev server: pnpm dev:${appName}-${appType} (from project root)\n`);
+  
+  if (framework && framework !== 'plain') {
+    console.log(`🎨 ${framework.charAt(0).toUpperCase() + framework.slice(1)} app scaffolded with Vite`);
+    console.log('🌐 Dev server will run on: http://localhost:3001\n');
+  }
 }
 
 /**
